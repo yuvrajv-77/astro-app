@@ -21,7 +21,12 @@ import {
   Settings,
   Sparkles,
   Info,
-  Printer
+  Printer,
+  Gauge,
+  Database,
+  Network,
+  Layers,
+  Timer
 } from "lucide-react";
 import { JSONTreeView } from "./JSONTreeView";
 import { Button } from "@/components/ui/button";
@@ -519,7 +524,74 @@ export const JSONEditor: React.FC<JSONEditorProps> = ({ mode }) => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
-  const inputSize = new Blob([inputText]).size;
+  // Real-time structural JSON metrics engine
+  const metrics = React.useMemo(() => {
+    const sizeBytes = new Blob([inputText]).size;
+    const charCount = inputText.length;
+    const lineCount = inputText.trim() === "" ? 0 : inputText.split("\n").length;
+
+    let depth = 0;
+    let nodeCount = 0;
+    let parseTimeMs = 0;
+
+    if (inputText.trim() !== "") {
+      try {
+        const startTime = performance.now();
+        const parsed = JSON.parse(inputText);
+        const endTime = performance.now();
+        parseTimeMs = endTime - startTime;
+
+        const calculateDepth = (val: any): number => {
+          if (typeof val !== "object" || val === null) return 0;
+          let maxSubDepth = 0;
+          if (Array.isArray(val)) {
+            for (let i = 0; i < val.length; i++) {
+              maxSubDepth = Math.max(maxSubDepth, calculateDepth(val[i]));
+            }
+          } else {
+            for (const k in val) {
+              if (Object.prototype.hasOwnProperty.call(val, k)) {
+                maxSubDepth = Math.max(maxSubDepth, calculateDepth(val[k]));
+              }
+            }
+          }
+          return maxSubDepth + 1;
+        };
+
+        const calculateNodes = (val: any): number => {
+          if (typeof val !== "object" || val === null) return 1;
+          let count = 1; // Count container node itself
+          if (Array.isArray(val)) {
+            for (let i = 0; i < val.length; i++) {
+              count += calculateNodes(val[i]);
+            }
+          } else {
+            for (const k in val) {
+              if (Object.prototype.hasOwnProperty.call(val, k)) {
+                count += calculateNodes(val[k]);
+              }
+            }
+          }
+          return count;
+        };
+
+        depth = calculateDepth(parsed);
+        nodeCount = calculateNodes(parsed);
+      } catch (e) {
+        // Invalid JSON - keep default values
+      }
+    }
+
+    return {
+      sizeBytes,
+      charCount,
+      lineCount,
+      depth,
+      nodeCount,
+      parseTimeMs,
+    };
+  }, [inputText]);
+
   const outputSize = new Blob([outputText]).size;
 
   return (
@@ -553,9 +625,7 @@ export const JSONEditor: React.FC<JSONEditorProps> = ({ mode }) => {
                 <Braces size={16} className="text-primary" />
                 <CardTitle className="text-xs font-semibold font-sans tracking-wide">INPUT JSON</CardTitle>
                 <div className="hidden sm:flex items-center gap-1.5 text-[10px] font-mono text-muted-foreground/60 ml-2">
-                  <span>({lineCount} lines</span>
-                  <span>•</span>
-                  <span>{formatBytes(inputSize)})</span>
+                  <span>({metrics.lineCount} lines)</span>
                 </div>
               </div>
 
@@ -933,6 +1003,69 @@ export const JSONEditor: React.FC<JSONEditorProps> = ({ mode }) => {
                   </Button>
                 </div>
 
+              </CardContent>
+            </Card>
+
+            {/* Diagnostics HUD Card */}
+            <Card className="py-0 border-border bg-card/40 backdrop-blur-md flex flex-col shadow-lg overflow-hidden shrink-0">
+              <div className="h-10 px-4 bg-secondary/15 border-b border-border flex flex-row items-center gap-2 shrink-0">
+                <Gauge size={13} className="text-primary animate-pulse" />
+                <CardTitle className="text-[10px] font-bold font-sans tracking-wide text-muted-foreground uppercase">JSON Diagnostics HUD</CardTitle>
+              </div>
+              <CardContent className="p-3.5 grid grid-cols-2 gap-2 text-xs font-mono">
+                {/* Size Metric */}
+                <div className="flex flex-col gap-1 p-2 bg-secondary/20 rounded border border-border/40 hover:bg-secondary/45 hover:border-primary/20 transition-all">
+                  <div className="flex items-center gap-1.5 text-[9px] font-sans text-muted-foreground">
+                    <Database size={11} className="text-muted-foreground/85" />
+                    <span>File Size</span>
+                  </div>
+                  <span className="text-xs font-semibold text-card-foreground">
+                    {formatBytes(metrics.sizeBytes)}
+                  </span>
+                </div>
+
+                {/* Nodes Metric */}
+                <div className="flex flex-col gap-1 p-2 bg-secondary/20 rounded border border-border/40 hover:bg-secondary/45 hover:border-primary/20 transition-all">
+                  <div className="flex items-center gap-1.5 text-[9px] font-sans text-muted-foreground">
+                    <Network size={11} className="text-muted-foreground/85" />
+                    <span>Total Nodes</span>
+                  </div>
+                  <span className="text-xs font-semibold text-card-foreground">
+                    {validationStatus === "valid" && metrics.nodeCount > 0 ? metrics.nodeCount.toLocaleString() : "—"}
+                  </span>
+                </div>
+
+                {/* Depth Metric */}
+                <div className="flex flex-col gap-1 p-2 bg-secondary/20 rounded border border-border/40 hover:bg-secondary/45 hover:border-primary/20 transition-all">
+                  <div className="flex items-center gap-1.5 text-[9px] font-sans text-muted-foreground">
+                    <Layers size={11} className="text-muted-foreground/85" />
+                    <span>Nesting Depth</span>
+                  </div>
+                  <span className="text-xs font-semibold text-card-foreground">
+                    {validationStatus === "valid" && metrics.depth > 0 ? `${metrics.depth} levels` : "—"}
+                  </span>
+                </div>
+
+                {/* Parse Speed Metric */}
+                <div className="flex flex-col gap-1 p-2 bg-secondary/20 rounded border border-border/40 hover:bg-secondary/45 hover:border-primary/20 transition-all">
+                  <div className="flex items-center gap-1.5 text-[9px] font-sans text-muted-foreground">
+                    <Timer size={11} className="text-muted-foreground/85" />
+                    <span>Parse Time</span>
+                  </div>
+                  <span className={cn(
+                    "text-xs font-semibold",
+                    validationStatus === "valid" ? "text-emerald-500 dark:text-emerald-400" : "text-card-foreground"
+                  )}>
+                    {validationStatus === "valid" ? `${metrics.parseTimeMs.toFixed(2)} ms` : "—"}
+                  </span>
+                </div>
+
+                {/* Line Count & Characters HUD row span */}
+                <div className="col-span-2 flex justify-between items-center px-2 py-1.5 bg-secondary/10 border-t border-border/20 text-[10px] text-muted-foreground font-sans mt-1">
+                  <span>Lines: <strong className="font-mono text-card-foreground/95 font-semibold">{metrics.lineCount}</strong></span>
+                  <span className="text-muted-foreground/30">•</span>
+                  <span>Chars: <strong className="font-mono text-card-foreground/95 font-semibold">{metrics.charCount.toLocaleString()}</strong></span>
+                </div>
               </CardContent>
             </Card>
 

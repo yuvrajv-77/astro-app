@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { ChevronRight, ChevronDown, Copy } from "lucide-react";
+import { ChevronRight, ChevronDown, Copy, Eye, ExternalLink } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface TreeViewProps {
   data: any;
@@ -14,17 +15,97 @@ export const JSONTreeView: React.FC<TreeViewProps> = ({
   expandAll = false,
   collapseAll = false,
 }) => {
+  const [hoveredPath, setHoveredPath] = useState<string>("");
+  const [copiedSegment, setCopiedSegment] = useState<string | null>(null);
+
+  const handleCopySegment = (pathSegment: string) => {
+    navigator.clipboard.writeText(pathSegment);
+    setCopiedSegment(pathSegment);
+    setTimeout(() => setCopiedSegment(null), 1200);
+  };
+
+  const renderBreadcrumbs = () => {
+    if (!hoveredPath) {
+      return (
+        <span className="text-muted-foreground/40 italic select-none">
+          Hover over nodes to inspect JSON path...
+        </span>
+      );
+    }
+
+    const parts: { name: string; fullPath: string }[] = [];
+    let currentPath = "";
+    
+    // Parse using regex to split by '.' or '[index]'
+    const regex = /([^.\[\]]+|\[\d+\])/g;
+    const matches = hoveredPath.match(regex);
+    
+    if (matches) {
+      matches.forEach((token, index) => {
+        if (index === 0) {
+          currentPath = token;
+        } else if (token.startsWith("[")) {
+          currentPath += token;
+        } else {
+          currentPath += `.${token}`;
+        }
+        parts.push({
+          name: token,
+          fullPath: currentPath === "root" ? "root" : currentPath.replace(/^root\./, ""),
+        });
+      });
+    }
+
+    return (
+      <div className="flex items-center gap-1 flex-wrap">
+        {parts.map((part, index) => (
+          <React.Fragment key={index}>
+            {index > 0 && <span className="text-muted-foreground/35 select-none">›</span>}
+            <button
+              onClick={() => handleCopySegment(part.fullPath)}
+              className={cn(
+                "hover:text-primary hover:underline transition-colors px-1 py-0.5 rounded cursor-pointer max-w-[120px] truncate",
+                copiedSegment === part.fullPath
+                  ? "text-emerald-500 font-bold bg-emerald-500/10 text-[10px]"
+                  : "text-muted-foreground hover:bg-secondary/45"
+              )}
+              title={`Click to copy path: ${part.fullPath}`}
+            >
+              {part.name}
+            </button>
+          </React.Fragment>
+        ))}
+        {copiedSegment && (
+          <span className="text-[9px] text-emerald-400 ml-2 animate-in fade-in select-none font-sans font-semibold">
+            Copied!
+          </span>
+        )}
+      </div>
+    );
+  };
+
   return (
-    <div className="font-mono text-xs select-text overflow-x-auto p-4 leading-relaxed">
-      <TreeNode
-        name="root"
-        value={data}
-        path=""
-        searchQuery={searchQuery}
-        expandAll={expandAll}
-        collapseAll={collapseAll}
-        isLast={true}
-      />
+    <div className="flex flex-col h-full relative" onMouseLeave={() => setHoveredPath("")}>
+      {/* Scrollable Tree Area */}
+      <div className="flex-1 overflow-y-auto select-text p-4 leading-relaxed font-mono text-xs min-h-0">
+        <TreeNode
+          name="root"
+          value={data}
+          path=""
+          searchQuery={searchQuery}
+          expandAll={expandAll}
+          collapseAll={collapseAll}
+          isLast={true}
+          onHover={setHoveredPath}
+        />
+      </div>
+
+      {/* Sticky Interactive Breadcrumbs Status Bar */}
+      <div className="sticky bottom-0 left-0 right-0 border-t border-border/40 bg-card/90 backdrop-blur-md px-3.5 py-1.5 h-8 flex items-center justify-between text-[10px] font-mono shrink-0 select-text z-10">
+        <div className="flex-1 overflow-x-auto no-scrollbar scroll-smooth">
+          {renderBreadcrumbs()}
+        </div>
+      </div>
     </div>
   );
 };
@@ -37,6 +118,7 @@ interface TreeNodeProps {
   expandAll: boolean;
   collapseAll: boolean;
   isLast: boolean;
+  onHover: (path: string) => void;
 }
 
 const TreeNode: React.FC<TreeNodeProps> = ({
@@ -47,6 +129,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
   expandAll,
   collapseAll,
   isLast,
+  onHover,
 }) => {
   const type = typeof value;
   const isNull = value === null;
@@ -80,12 +163,12 @@ const TreeNode: React.FC<TreeNodeProps> = ({
   const [copiedPath, setCopiedPath] = useState(false);
   const handleCopyPath = (e: React.MouseEvent) => {
     e.stopPropagation();
-    navigator.clipboard.writeText(path || "root");
+    const cleanPath = path || "root";
+    const userPath = cleanPath === "root" ? "root" : cleanPath.replace(/^root\./, "");
+    navigator.clipboard.writeText(userPath);
     setCopiedPath(true);
     setTimeout(() => setCopiedPath(false), 1000);
   };
-
-  // matchesSearch unused, removed
 
   // Automatically expand if parent or children contains matches
   useEffect(() => {
@@ -131,12 +214,59 @@ const TreeNode: React.FC<TreeNodeProps> = ({
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   };
 
+  const renderTypeBadge = (t: string, isValNull: boolean) => {
+    let label = t;
+    let badgeClass = "";
+    
+    if (isValNull) {
+      label = "null";
+      badgeClass = "bg-red-500/10 text-red-500 border-red-500/20";
+    } else if (isArray) {
+      label = "array";
+      badgeClass = "bg-indigo-500/10 text-indigo-500 border-indigo-500/20";
+    } else if (isObject) {
+      label = "object";
+      badgeClass = "bg-purple-500/10 text-purple-500 dark:text-purple-400 border-purple-500/20";
+    } else {
+      switch (t) {
+        case "string":
+          label = "str";
+          badgeClass = "bg-emerald-500/10 text-emerald-500 border-emerald-500/20";
+          break;
+        case "number":
+          label = "num";
+          badgeClass = "bg-blue-500/10 text-blue-500 dark:text-sky-400 border-blue-500/20";
+          break;
+        case "boolean":
+          label = "bool";
+          badgeClass = "bg-amber-500/10 text-amber-500 border-amber-500/20";
+          break;
+        default:
+          badgeClass = "bg-muted text-muted-foreground border-border";
+      }
+    }
+
+    return (
+      <span className={cn("text-[7.5px] font-sans font-medium px-1 py-0.2 rounded border uppercase tracking-wider scale-90 origin-left inline-block select-none", badgeClass)}>
+        {label}
+      </span>
+    );
+  };
+
   // Render bracket structures
   const renderHeader = () => {
     const keyLabel = typeof name === "string" ? `"${name}"` : name;
     
+    const handleMouseEnter = (e: React.MouseEvent) => {
+      e.stopPropagation();
+      onHover(path || "root");
+    };
+
     return (
-      <div className="group/node inline-flex items-center gap-1.5 py-0.5 hover:bg-muted/30 px-1 rounded transition-colors w-full">
+      <div 
+        onMouseEnter={handleMouseEnter}
+        className="group/node inline-flex items-center gap-1.5 py-0.5 hover:bg-muted/30 px-1 rounded transition-colors w-full"
+      >
         {isCollapsible ? (
           <button 
             onClick={toggleExpand}
@@ -155,6 +285,9 @@ const TreeNode: React.FC<TreeNodeProps> = ({
             <span className="text-foreground font-normal">: </span>
           </span>
         )}
+
+        {/* Type Badge */}
+        {renderTypeBadge(type, isNull)}
 
         {/* Value Details */}
         {isCollapsible ? (
@@ -207,12 +340,26 @@ const TreeNode: React.FC<TreeNodeProps> = ({
     }
 
     switch (valType) {
-      case "string":
+      case "string": {
+        const valStr = String(val);
+        const isLink = valStr.startsWith("http://") || valStr.startsWith("https://");
+        if (isLink) {
+          const isImage = /\.(jpeg|jpg|gif|png|webp|svg|bmp)(?:\?.*)?$/i.test(valStr);
+          return (
+            <StringLink
+              val={valStr}
+              isImage={isImage}
+              searchQuery={searchQuery}
+              highlightText={highlightText}
+            />
+          );
+        }
         return (
           <span className="text-emerald-600 dark:text-emerald-400 select-all break-all">
-            "{highlightText(val, searchQuery)}"
+            "{highlightText(valStr, searchQuery)}"
           </span>
         );
+      }
       case "number":
         return (
           <span className="text-blue-600 dark:text-sky-400 font-semibold select-all">
@@ -248,6 +395,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
                   expandAll={expandAll}
                   collapseAll={collapseAll}
                   isLast={idx === value.length - 1}
+                  onHover={onHover}
                 />
               );
             })
@@ -264,6 +412,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
                   expandAll={expandAll}
                   collapseAll={collapseAll}
                   isLast={idx === keysArray.length - 1}
+                  onHover={onHover}
                 />
               );
             })
@@ -276,5 +425,69 @@ const TreeNode: React.FC<TreeNodeProps> = ({
         </div>
       )}
     </div>
+  );
+};
+
+// Clickable link and hover preview component
+interface StringLinkProps {
+  val: string;
+  isImage: boolean;
+  searchQuery: string;
+  highlightText: (text: string, highlight: string) => React.ReactNode;
+}
+
+const StringLink: React.FC<StringLinkProps> = ({ val, isImage, searchQuery, highlightText }) => {
+  const [showPreview, setShowPreview] = useState(false);
+
+  return (
+    <span className="inline-flex items-center gap-1.5 relative group/link select-all">
+      <a
+        href={val}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-emerald-600 dark:text-emerald-400 hover:text-primary dark:hover:text-primary underline cursor-pointer break-all transition-colors"
+      >
+        "{highlightText(val, searchQuery)}"
+      </a>
+      
+      {isImage ? (
+        <span className="relative inline-flex items-center">
+          <button
+            onMouseEnter={() => setShowPreview(true)}
+            onMouseLeave={() => setShowPreview(false)}
+            className="p-0.5 hover:bg-secondary rounded text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+            aria-label="Preview image"
+          >
+            <Eye size={11} />
+          </button>
+          
+          {showPreview && (
+            <div className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 p-2 bg-popover border border-border rounded-lg shadow-xl animate-in fade-in zoom-in-95 duration-150 max-w-[200px] pointer-events-none">
+              <img
+                src={val}
+                alt="Preview"
+                className="max-h-[140px] max-w-[180px] object-contain rounded border border-border bg-secondary/35"
+                onError={(e) => {
+                  (e.target as HTMLElement).style.display = "none";
+                }}
+              />
+              <div className="text-[8px] text-muted-foreground text-center mt-1 truncate max-w-[160px]">
+                {val.split("/").pop() || "Image Preview"}
+              </div>
+            </div>
+          )}
+        </span>
+      ) : (
+        <a
+          href={val}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-muted-foreground hover:text-foreground p-0.5 hover:bg-secondary rounded transition-colors inline-flex items-center"
+          title="Open link in new tab"
+        >
+          <ExternalLink size={10} />
+        </a>
+      )}
+    </span>
   );
 };
