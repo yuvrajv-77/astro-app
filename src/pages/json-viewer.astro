@@ -1,0 +1,79 @@
+---
+import Layout from "@/layouts/main.astro";
+import { JSONEditor } from "@/components/JSONEditor";
+import { FAQAccordion } from "@/components/FAQAccordion";
+
+const faqItems = [
+  {
+    id: "faq-1",
+    question: "What is a JSON Tree Viewer?",
+    answer: "A JSON Tree Viewer is an interactive explorer that parses flat, stringified JSON text into a collapsible hierarchy of key-value nodes, objects, and arrays. This makes navigating large, nested JSON data structures extremely fast and intuitive."
+  },
+  {
+    id: "faq-2",
+    question: "How does the search functionality work inside the tree viewer?",
+    answer: "The search bar inside the Tree Explorer lets you type any partial key or value string. The explorer instantly filters and highlights all matching nodes, expanding their parent paths dynamically to show where they reside in the nested structure."
+  },
+  {
+    id: "faq-3",
+    question: "How does the 'Copy Path' feature help developers?",
+    answer: "When inspecting complex JSON (like deep nesting in REST API payloads), finding the query path for a key can be tedious. Hovering over a key in our Tree Explorer reveals a 'Copy Path' button that instantly copies the JavaScript access path (e.g. `payload.data.users[0].address.zipcode`) directly to your clipboard."
+  }
+];
+---
+
+<Layout 
+  title="JSON Viewer - Interactive Online Tree Explorer"
+  description="Inspect and explore your JSON data in an interactive tree view. Search nodes, collapse nesting levels, and copy JavaScript query paths instantly. 100% private in-browser tool."
+  canonicalUrl="/json-viewer"
+  currentActive="viewer"
+>
+  <div class="container mx-auto px-4 py-6 flex-1 flex flex-col gap-6">
+    <!-- Header introduction -->
+    <div class="shrink-0">
+      <h1 class="text-2xl md:text-3xl font-heading font-bold tracking-tight text-foreground">
+        JSON Tree Viewer & Explorer
+      </h1>
+      <p class="text-xs md:text-sm text-muted-foreground mt-1.5 leading-relaxed">
+        Paste your JSON below to parse it into an interactive collapsible tree structure. Search keys, values, and copy path references immediately.
+      </p>
+    </div>
+
+    <!-- The Interactive Editor Component -->
+    <div class="flex-1 flex flex-col min-h-0">
+      <JSONEditor client:load mode="formatter" />
+    </div>
+
+    <!-- SEO & Documentation Content Section -->
+    <section class="border-t border-border/60 pt-10 mt-6 grid grid-cols-1 md:grid-cols-2 gap-8 text-xs leading-relaxed max-w-5xl">
+      <div class="space-y-4">
+        <h2 class="text-base font-heading font-semibold text-foreground tracking-wide">
+          What is a JSON Viewer?
+        </h2>
+        <p class="text-muted-foreground">
+          A <strong>JSON Viewer</strong> is a development utility that parses raw, stringified JSON code and turns it into a visual tree object. When dealing with large database responses, microservice configs, or third-party API payloads, scanning raw strings is nearly impossible.
+        </p>
+        <p class="text-muted-foreground">
+          Our online viewer builds a high-performance tree interface that allows you to expand and collapse nodes, search items dynamically, and copy code paths instantly.
+        </p>
+
+        <h3 class="text-sm font-heading font-medium text-foreground">
+          Interactive Inspection Features
+        </h3>
+        <ul class="list-disc pl-4 space-y-1.5 text-muted-foreground">
+          <li><strong>Collapsible Tree Hierarchy:</strong> Expand or collapse arrays and objects with single clicks to hide or expose deeply nested structures.</li>
+          <li><strong>Real-time Search Filter:</strong> Highlight relevant objects and keys by typing queries into the tree search bar.</li>
+          <li><strong>Local Syntax Diagnostics:</strong> If the input code contains syntax errors (like missing quotes or commas), a warning banner links you directly to the offending line.</li>
+        </ul>
+      </div>
+
+      <div class="space-y-4">
+        <h2 class="text-base font-heading font-semibold text-foreground tracking-wide">
+          Frequently Asked Questions (FAQ)
+        </h2>
+        
+        <FAQAccordion items={faqItems} client:load />
+      </div>
+    </section>
+  </div>
+</Layout>

@@ -5,7 +5,7 @@ interface Props {
   title?: string;
   description?: string;
   canonicalUrl?: string;
-  currentActive?: "formatter" | "validator" | "minifier" | "blog";
+  currentActive?: "formatter" | "validator" | "minifier" | "viewer" | "blog";
 }
 
 const {
@@ -80,7 +80,25 @@ const finalCanonical = canonicalUrl ? `${siteUrl}${canonicalUrl}` : siteUrl;
               href="/" 
               class={`px-3 py-1.5 rounded-md transition-colors ${currentActive === 'formatter' ? 'bg-secondary text-secondary-foreground font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
             >
-              JSON Sandbox
+              Formatter
+            </a>
+            <a 
+              href="/json-validator" 
+              class={`px-3 py-1.5 rounded-md transition-colors ${currentActive === 'validator' ? 'bg-secondary text-secondary-foreground font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              Validator
+            </a>
+            <a 
+              href="/json-minifier" 
+              class={`px-3 py-1.5 rounded-md transition-colors ${currentActive === 'minifier' ? 'bg-secondary text-secondary-foreground font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              Minifier
+            </a>
+            <a 
+              href="/json-viewer" 
+              class={`px-3 py-1.5 rounded-md transition-colors ${currentActive === 'viewer' ? 'bg-secondary text-secondary-foreground font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              Viewer
             </a>
             <a 
               href="/blog" 
@@ -124,11 +142,20 @@ const finalCanonical = canonicalUrl ? `${siteUrl}${canonicalUrl}` : siteUrl;
       </div>
       
       <!-- Mobile Navigation Drawer Link Bar (visible on small viewports) -->
-      <div class="md:hidden flex border-t border-border overflow-x-auto divide-x divide-border text-xs">
-        <a href="/" class={`flex-1 text-center py-2.5 transition-colors whitespace-nowrap px-3 ${currentActive === 'formatter' ? 'bg-secondary/70 text-foreground font-semibold' : 'text-muted-foreground'}`}>
-          JSON Sandbox
+      <div class="md:hidden flex border-t border-border overflow-x-auto divide-x divide-border text-xs scrollbar-none">
+        <a href="/" class={`flex-1 text-center py-2.5 transition-colors whitespace-nowrap px-4 ${currentActive === 'formatter' ? 'bg-secondary/70 text-foreground font-semibold' : 'text-muted-foreground'}`}>
+          Formatter
         </a>
-        <a href="/blog" class={`flex-1 text-center py-2.5 transition-colors whitespace-nowrap px-3 ${currentActive === 'blog' ? 'bg-secondary/70 text-foreground font-semibold' : 'text-muted-foreground'}`}>
+        <a href="/json-validator" class={`flex-1 text-center py-2.5 transition-colors whitespace-nowrap px-4 ${currentActive === 'validator' ? 'bg-secondary/70 text-foreground font-semibold' : 'text-muted-foreground'}`}>
+          Validator
+        </a>
+        <a href="/json-minifier" class={`flex-1 text-center py-2.5 transition-colors whitespace-nowrap px-4 ${currentActive === 'minifier' ? 'bg-secondary/70 text-foreground font-semibold' : 'text-muted-foreground'}`}>
+          Minifier
+        </a>
+        <a href="/json-viewer" class={`flex-1 text-center py-2.5 transition-colors whitespace-nowrap px-4 ${currentActive === 'viewer' ? 'bg-secondary/70 text-foreground font-semibold' : 'text-muted-foreground'}`}>
+          Viewer
+        </a>
+        <a href="/blog" class={`flex-1 text-center py-2.5 transition-colors whitespace-nowrap px-4 ${currentActive === 'blog' ? 'bg-secondary/70 text-foreground font-semibold' : 'text-muted-foreground'}`}>
           Guides
         </a>
       </div>
@@ -158,8 +185,11 @@ const finalCanonical = canonicalUrl ? `${siteUrl}${canonicalUrl}` : siteUrl;
           <div>
             <h3 class="font-heading font-semibold text-foreground mb-3 tracking-wide">Navigation</h3>
             <ul class="space-y-2 text-xs">
-              <li><a href="/" class="hover:text-primary transition-colors">JSON Sandbox Workspace</a></li>
-              <li><a href="/blog" class="hover:text-primary transition-colors">Guides & Documentation</a></li>
+              <li><a href="/" class="hover:text-primary transition-colors">JSON Formatter & Viewer</a></li>
+              <li><a href="/json-validator" class="hover:text-primary transition-colors">JSON Validator</a></li>
+              <li><a href="/json-minifier" class="hover:text-primary transition-colors">JSON Minifier</a></li>
+              <li><a href="/json-viewer" class="hover:text-primary transition-colors">JSON Tree Viewer</a></li>
+              <li><a href="/blog" class="hover:text-primary transition-colors">Guides & Tutorials</a></li>
             </ul>
           </div>
         </div>

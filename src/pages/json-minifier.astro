@@ -1,0 +1,79 @@
+---
+import Layout from "@/layouts/main.astro";
+import { JSONEditor } from "@/components/JSONEditor";
+import { FAQAccordion } from "@/components/FAQAccordion";
+
+const faqItems = [
+  {
+    id: "faq-1",
+    question: "Why should I minify JSON data?",
+    answer: "Minification strips all unnecessary whitespace, line breaks, and indentation from the JSON payload. This significantly reduces the raw file size, lowering server bandwidth costs and speeding up transfer speeds for API responses and web app data loads."
+  },
+  {
+    id: "faq-2",
+    question: "Will minifying JSON affect the parsed JavaScript object?",
+    answer: "No. Minifying JSON only alters the visual presentation (removing spacing). When parsed by code (e.g. JSON.parse() in JavaScript), the resulting object structure remains 100% identical."
+  },
+  {
+    id: "faq-3",
+    question: "Is there a size limit for files I can minify?",
+    answer: "Because all minification occurs client-side within your browser, the performance depends on your local hardware memory. Generally, JSON files up to 50MB can be minified instantly without browser lag."
+  }
+];
+---
+
+<Layout 
+  title="JSON Minifier - Compress JSON Online"
+  description="Compress, compact, and minify JSON online. Remove unnecessary spacing, newlines, and indentation to optimize API payloads. 100% private client-side minifier."
+  canonicalUrl="/json-minifier"
+  currentActive="minifier"
+>
+  <div class="container mx-auto px-4 py-6 flex-1 flex flex-col gap-6">
+    <!-- Header introduction -->
+    <div class="shrink-0">
+      <h1 class="text-2xl md:text-3xl font-heading font-bold tracking-tight text-foreground">
+        JSON Minifier & Compressor
+      </h1>
+      <p class="text-xs md:text-sm text-muted-foreground mt-1.5 leading-relaxed">
+        Paste your JSON below to compress it. Strip comments, whitespace, and line breaks to optimize your data payloads for production networks.
+      </p>
+    </div>
+
+    <!-- The Interactive Editor Component -->
+    <div class="flex-1 flex flex-col min-h-0">
+      <JSONEditor client:load mode="minifier" />
+    </div>
+
+    <!-- SEO & Documentation Content Section -->
+    <section class="border-t border-border/60 pt-10 mt-6 grid grid-cols-1 md:grid-cols-2 gap-8 text-xs leading-relaxed max-w-5xl">
+      <div class="space-y-4">
+        <h2 class="text-base font-heading font-semibold text-foreground tracking-wide">
+          What is JSON Minification?
+        </h2>
+        <p class="text-muted-foreground">
+          JSON minification is the process of compressing JSON text by removing human-oriented formatting (spaces, tabs, newlines, carriage returns). While beautified JSON makes reading configurations and debugging API payloads easy for developers, machines do not need these visual aids.
+        </p>
+        <p class="text-muted-foreground">
+          Minified JSON represents the same data object structure, but in the smallest possible byte representation. This reduces the latency of transmitting JSON packets across TCP/IP streams, leading to snappier applications and reduced data bills.
+        </p>
+
+        <h3 class="text-sm font-heading font-medium text-foreground">
+          Benefits of Compacting JSON
+        </h3>
+        <ul class="list-disc pl-4 space-y-1.5 text-muted-foreground">
+          <li><strong>Optimized Network Payloads:</strong> Removing whitespace can decrease the size of structured data payloads by 15% to 30%.</li>
+          <li><strong>Faster Parse Speeds:</strong> Parsers (like browsers or backend environments) spend less CPU time scanning empty whitespaces and lines.</li>
+          <li><strong>Secure and Lightweight:</strong> Local client-side minification guarantees that credentials inside payloads are never transmitted to third-party endpoints.</li>
+        </ul>
+      </div>
+
+      <div class="space-y-4">
+        <h2 class="text-base font-heading font-semibold text-foreground tracking-wide">
+          Frequently Asked Questions (FAQ)
+        </h2>
+        
+        <FAQAccordion items={faqItems} client:load />
+      </div>
+    </section>
+  </div>
+</Layout>

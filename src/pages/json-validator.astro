@@ -1,0 +1,80 @@
+---
+import Layout from "@/layouts/main.astro";
+import { JSONEditor } from "@/components/JSONEditor";
+import { FAQAccordion } from "@/components/FAQAccordion";
+
+const faqItems = [
+  {
+    id: "faq-1",
+    question: "How does the JSON validator highlight syntax errors?",
+    answer: "Our validator analyzes the JSON input and points out the exact line and column numbers of any syntax error (such as missing commas, mismatched braces, or unquoted keys). You can click the error banner to jump directly to the invalid character in the editor."
+  },
+  {
+    id: "faq-2",
+    question: "Is my data sent to any remote server for validation?",
+    answer: "No. Security and privacy are key. All validation, parsing, and diagnostic calculations happen 100% locally in your browser. No data leaves your machine."
+  },
+  {
+    id: "faq-3",
+    question: "Does the validator support JSON Schema check?",
+    answer: "Currently, our tool validates standard RFC 8259 syntax. Support for validating against a custom JSON Schema is on our roadmap for a future update."
+  }
+];
+---
+
+<Layout 
+  title="JSON Validator - Online Syntax Checker & Debugger"
+  description="Validate and debug your JSON syntax online. Spot missing commas, mismatched braces, unquoted keys, or syntax errors instantly. 100% private and offline-first."
+  canonicalUrl="/json-validator"
+  currentActive="validator"
+>
+  <div class="container mx-auto px-4 py-6 flex-1 flex flex-col gap-6">
+    <!-- Header introduction -->
+    <div class="shrink-0">
+      <h1 class="text-2xl md:text-3xl font-heading font-bold tracking-tight text-foreground">
+        JSON Validator & Syntax Checker
+      </h1>
+      <p class="text-xs md:text-sm text-muted-foreground mt-1.5 leading-relaxed">
+        Paste your JSON below to validate its syntax. Locate and debug formatting errors, missing commas, or mismatched brackets in real-time.
+      </p>
+    </div>
+
+    <!-- The Interactive Editor Component -->
+    <div class="flex-1 flex flex-col min-h-0">
+      <JSONEditor client:load mode="validator" />
+    </div>
+
+    <!-- SEO & Documentation Content Section -->
+    <section class="border-t border-border/60 pt-10 mt-6 grid grid-cols-1 md:grid-cols-2 gap-8 text-xs leading-relaxed max-w-5xl">
+      <div class="space-y-4">
+        <h2 class="text-base font-heading font-semibold text-foreground tracking-wide">
+          What is a JSON Validator?
+        </h2>
+        <p class="text-muted-foreground">
+          A <strong>JSON Validator</strong> is a tool designed to verify if a given payload follows the official JavaScript Object Notation (JSON) format specifications defined in RFC 8259. A single syntax mistake, like a trailing comma or an unescaped double quote, will make the JSON invalid and cause API integrations to fail.
+        </p>
+        <p class="text-muted-foreground">
+          Our online validator reads your JSON data stringently and provides detailed syntax feedback immediately. It indicates the exact line and character position where the parser failed, allowing you to troubleshoot payload anomalies in seconds.
+        </p>
+
+        <h3 class="text-sm font-heading font-medium text-foreground">
+          Common JSON Validation Errors
+        </h3>
+        <ul class="list-disc pl-4 space-y-1.5 text-muted-foreground">
+          <li><strong>Trailing Commas:</strong> Placing a comma after the final key-value pair or list item is not allowed in JSON.</li>
+          <li><strong>Unquoted Keys:</strong> In JSON, all keys must be surrounded by double quotes (e.g. <code>"key": "value"</code>, not <code>key: "value"</code>).</li>
+          <li><strong>Single Quotes:</strong> String values must be wrapped in double quotes. Single quotes (<code>'</code>) are invalid.</li>
+          <li><strong>Mismatched Closures:</strong> Forgetting to close an array bracket (<code>]</code>) or object brace (<code>&#123;</code>).</li>
+        </ul>
+      </div>
+
+      <div class="space-y-4">
+        <h2 class="text-base font-heading font-semibold text-foreground tracking-wide">
+          Frequently Asked Questions (FAQ)
+        </h2>
+        
+        <FAQAccordion items={faqItems} client:load />
+      </div>
+    </section>
+  </div>
+</Layout>
