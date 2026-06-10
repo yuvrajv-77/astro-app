@@ -1,15 +1,164 @@
 ---
 import "@/styles/global.css"
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalUrl?: string;
+  currentActive?: "formatter" | "validator" | "minifier" | "blog";
+}
+
+const {
+  title = "DevJSON Sandbox - Free Online JSON Viewer, Formatter & Validator",
+  description = "An offline-first, private-by-design developer utility suite. Format, beautify, validate, minify, and inspect JSON in an interactive tree view. No data ever leaves your computer.",
+  canonicalUrl,
+  currentActive = "formatter",
+} = Astro.props;
+
+// Build absolute canonical URL
+const siteUrl = "https://devjsonsandbox.pages.dev"; // Placeholders replaced with clean static production domain
+const finalCanonical = canonicalUrl ? `${siteUrl}${canonicalUrl}` : siteUrl;
 ---
 
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" class="dark">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Astro App</title>
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- SEO Meta Tags -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={finalCanonical} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={finalCanonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={`${siteUrl}/og-image.png`} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={finalCanonical} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={`${siteUrl}/og-image.png`} />
   </head>
-  <body>
-    <slot />
+  <body class="bg-background text-foreground min-h-screen flex flex-col font-mono selection:bg-primary/20">
+    <!-- Header -->
+    <header class="border-b border-border sticky top-0 bg-background/80 backdrop-blur-md z-50">
+      <div class="container mx-auto px-4 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-6">
+          <a href="/" class="flex items-center gap-2 font-heading font-semibold text-lg tracking-tight hover:opacity-90">
+            <span class="text-primary font-bold">{`{}`}</span>
+            <span>DevJSON<span class="text-muted-foreground font-light font-mono text-sm ml-1">Sandbox</span></span>
+          </a>
+          
+          <nav class="hidden md:flex items-center gap-1 text-sm font-medium">
+            <a 
+              href="/" 
+              class={`px-3 py-1.5 rounded-md transition-colors ${currentActive === 'formatter' ? 'bg-secondary text-secondary-foreground font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              Formatter & Viewer
+            </a>
+            <a 
+              href="/validator" 
+              class={`px-3 py-1.5 rounded-md transition-colors ${currentActive === 'validator' ? 'bg-secondary text-secondary-foreground font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              Validator
+            </a>
+            <a 
+              href="/minifier" 
+              class={`px-3 py-1.5 rounded-md transition-colors ${currentActive === 'minifier' ? 'bg-secondary text-secondary-foreground font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              Minifier
+            </a>
+            <a 
+              href="/blog" 
+              class={`px-3 py-1.5 rounded-md transition-colors ${currentActive === 'blog' ? 'bg-secondary text-secondary-foreground font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              Guides
+            </a>
+          </nav>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <a 
+            href="https://github.com" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="text-muted-foreground hover:text-foreground transition-colors p-2 rounded-md hover:bg-secondary/50"
+            title="View Code on GitHub"
+          >
+            <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.164 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
+            </svg>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Mobile Navigation Drawer Link Bar (visible on small viewports) -->
+      <div class="md:hidden flex border-t border-border overflow-x-auto divide-x divide-border text-xs">
+        <a href="/" class={`flex-1 text-center py-2.5 transition-colors whitespace-nowrap px-3 ${currentActive === 'formatter' ? 'bg-secondary/70 text-foreground font-semibold' : 'text-muted-foreground'}`}>
+          Formatter
+        </a>
+        <a href="/validator" class={`flex-1 text-center py-2.5 transition-colors whitespace-nowrap px-3 ${currentActive === 'validator' ? 'bg-secondary/70 text-foreground font-semibold' : 'text-muted-foreground'}`}>
+          Validator
+        </a>
+        <a href="/minifier" class={`flex-1 text-center py-2.5 transition-colors whitespace-nowrap px-3 ${currentActive === 'minifier' ? 'bg-secondary/70 text-foreground font-semibold' : 'text-muted-foreground'}`}>
+          Minifier
+        </a>
+        <a href="/blog" class={`flex-1 text-center py-2.5 transition-colors whitespace-nowrap px-3 ${currentActive === 'blog' ? 'bg-secondary/70 text-foreground font-semibold' : 'text-muted-foreground'}`}>
+          Guides
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-border bg-card py-10 mt-auto text-sm text-muted-foreground">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <h3 class="font-heading font-semibold text-foreground mb-3 tracking-wide">DevJSON Sandbox</h3>
+            <p class="max-w-xs text-xs leading-relaxed">
+              A private, fast, and feature-rich toolbox for parsing, cleaning, and validating JSON data. Designed exclusively for developer workflows.
+            </p>
+          </div>
+          <div>
+            <h3 class="font-heading font-semibold text-foreground mb-3 tracking-wide">Security & Privacy</h3>
+            <p class="max-w-xs text-xs leading-relaxed">
+              🔒 <strong>100% Offline Processing:</strong> All JSON formatting, minification, and parsing happen entirely inside your web browser. We never transmit your JSON data to any server.
+            </p>
+          </div>
+          <div>
+            <h3 class="font-heading font-semibold text-foreground mb-3 tracking-wide">Navigation</h3>
+            <ul class="space-y-2 text-xs">
+              <li><a href="/" class="hover:text-primary transition-colors">JSON Formatter & Viewer</a></li>
+              <li><a href="/validator" class="hover:text-primary transition-colors">JSON Syntax Validator</a></li>
+              <li><a href="/minifier" class="hover:text-primary transition-colors">JSON Compression Minifier</a></li>
+              <li><a href="/blog" class="hover:text-primary transition-colors">Developer Documentation</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="border-t border-border mt-8 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+          <p>© {new Date().getFullYear()} DevJSON Sandbox. All rights reserved.</p>
+          <div class="flex gap-4">
+            <span class="inline-flex items-center gap-1.5 text-primary">
+              <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              All Systems Operational
+            </span>
+          </div>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

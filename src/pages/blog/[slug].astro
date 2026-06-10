@@ -1,0 +1,152 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "@/layouts/main.astro";
+
+// Generate paths for all static markdown files using post.id (V6 Content Layer standard)
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Layout 
+  title={`${post.data.title} - DevJSON Sandbox`}
+  description={post.data.description}
+  canonicalUrl={`/blog/${post.id}`}
+  currentActive="blog"
+>
+  <article class="container mx-auto px-4 py-8 max-w-2xl flex-1 flex flex-col gap-6">
+    {/* Breadcrumb Navigation */}
+    <nav class="text-xs text-muted-foreground font-mono">
+      <a href="/blog" class="hover:text-primary transition-colors">&larr; Back to Guides</a>
+    </nav>
+
+    {/* Post Header */}
+    <header class="border-b border-border pb-4 flex flex-col gap-2">
+      <div class="flex flex-wrap items-center gap-2 text-[10px] text-muted-foreground font-mono">
+        <span>{post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+        <span>•</span>
+        <span>By {post.data.author}</span>
+      </div>
+      <h1 class="text-xl md:text-3xl font-heading font-bold tracking-tight text-foreground leading-tight">
+        {post.data.title}
+      </h1>
+      <p class="text-xs md:text-sm text-muted-foreground leading-relaxed italic">
+        {post.data.description}
+      </p>
+    </header>
+
+    {/* Post Content */}
+    <div class="blog-content text-xs md:text-sm leading-relaxed text-muted-foreground select-text font-sans">
+      <Content />
+    </div>
+
+    {/* Footer Tags */}
+    <footer class="border-t border-border pt-4 mt-8 flex flex-wrap gap-2">
+      {post.data.tags?.map((tag) => (
+        <span class="text-[10px] font-mono bg-secondary px-2 py-0.5 rounded text-secondary-foreground border border-border/40">
+          #{tag}
+        </span>
+      ))}
+    </footer>
+  </article>
+</Layout>
+
+<style is:global>
+  /* Scoped formatting for markdown render output utilizing theme variables */
+  .blog-content h2 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    font-family: var(--font-heading);
+    letter-spacing: -0.025em;
+  }
+  
+  .blog-content h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-family: var(--font-heading);
+  }
+
+  .blog-content p {
+    margin-bottom: 1.25rem;
+  }
+
+  .blog-content ul {
+    list-style-type: disc;
+    padding-left: 1.25rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .blog-content li {
+    padding-left: 0.25rem;
+  }
+
+  .blog-content li strong {
+    color: hsl(var(--foreground));
+  }
+
+  .blog-content hr {
+    border: 0;
+    border-top: 1px solid hsl(var(--border));
+    margin: 1.75rem 0;
+  }
+
+  .blog-content pre {
+    background-color: hsl(var(--secondary) / 40%);
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    margin-bottom: 1.25rem;
+    line-height: 1.5;
+  }
+
+  .blog-content code:not(pre code) {
+    background-color: hsl(var(--secondary));
+    border: 1px solid hsl(var(--border));
+    padding: 0.15rem 0.35rem;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: hsl(var(--foreground));
+  }
+
+  .blog-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.25rem;
+    font-size: 11px;
+    font-family: var(--font-mono);
+  }
+
+  .blog-content th {
+    background-color: hsl(var(--secondary) / 50%);
+    border: 1px solid hsl(var(--border));
+    padding: 0.5rem;
+    text-align: left;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+  }
+
+  .blog-content td {
+    border: 1px solid hsl(var(--border));
+    padding: 0.5rem;
+  }
+</style>

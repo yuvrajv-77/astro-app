@@ -1,17 +1,79 @@
 ---
-import Layout from "@/layouts/main.astro"
-import { Button } from "@/components/ui/button"
+import Layout from "@/layouts/main.astro";
+import { JSONEditor } from "@/components/JSONEditor";
+import { FAQAccordion } from "@/components/FAQAccordion";
+
+const faqItems = [
+  {
+    id: "faq-1",
+    question: "Is it safe to paste confidential credentials or API logs here?",
+    answer: "Yes. Unlike standard formatting tools, DevJSON Sandbox processes your input 100% locally in your web browser. No network requests are made when you type or click format. You can check the Network tab in developer tools to verify."
+  },
+  {
+    id: "faq-2",
+    question: "How do I use the copy path feature?",
+    answer: "Once you load valid JSON, switch to the \"Tree Viewer\" tab. Hover your cursor over any key, and click the \"Copy Path\" button on the right. It will save the exact path (e.g. store.books[1].title) directly to your clipboard."
+  },
+  {
+    id: "faq-3",
+    question: "Does this formatter support JSON Schema or CSV exports?",
+    answer: "We currently support formatting, minification, tree-view syntax parsing, and raw text exports. Schema validation and converter integrations are planned in our roadmap."
+  }
+];
 ---
 
-<Layout>
-  <div class="flex min-h-svh p-6">
-    <div class="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-      <div>
-        <h1 class="font-medium">Project ready!</h1>
-        <p>You may now add components and start building.</p>
-        <p>We've already added the button component for you.</p>
-        <Button client:load className="mt-2">Button</Button>
-      </div>
+<Layout 
+  title="JSON Viewer & Formatter Online - Beautify & Inspect JSON"
+  description="Free, secure, and offline-first JSON formatter and viewer. Beautify messy JSON, collapse nodes inside an interactive tree inspector, validate syntax errors, and copy paths. 100% private in-browser tool."
+  canonicalUrl="/"
+  currentActive="formatter"
+>
+  <div class="container mx-auto px-4 py-6 flex-1 flex flex-col gap-6">
+    <!-- Header introduction -->
+    <div class="shrink-0">
+      <h1 class="text-2xl md:text-3xl font-heading font-bold tracking-tight text-foreground">
+        JSON Formatter & Viewer
+      </h1>
+      <p class="text-xs md:text-sm text-muted-foreground mt-1.5 max-w-2xl leading-relaxed">
+        Paste your JSON below to beautify, format, validate, and explore it in an interactive tree view. All processing is done client-side for absolute privacy.
+      </p>
     </div>
+
+    <!-- The Interactive Editor Component -->
+    <div class="flex-1 flex flex-col min-h-0">
+      <JSONEditor client:load mode="formatter" />
+    </div>
+
+    <!-- SEO & Documentation Content Section -->
+    <section class="border-t border-border/60 pt-10 mt-6 grid grid-cols-1 md:grid-cols-2 gap-8 text-xs leading-relaxed max-w-5xl">
+      <div class="space-y-4">
+        <h2 class="text-base font-heading font-semibold text-foreground tracking-wide">
+          What is a JSON Formatter & Viewer?
+        </h2>
+        <p class="text-muted-foreground">
+          JSON (JavaScript Object Notation) is the standard format for exchanging data on the web. It is often minified or compressed to save server bandwidth, making it unreadable. A JSON Formatter takes minified, cluttered JSON and adds proper indentation, line breaks, and whitespace to make it human-readable.
+        </p>
+        <p class="text-muted-foreground">
+          Our <strong>JSON Viewer</strong> takes this a step further by building an interactive tree out of your data. You can expand and collapse nesting levels, hover over specific keys to copy their JSON query path, and search for specific values dynamically.
+        </p>
+
+        <h3 class="text-sm font-heading font-medium text-foreground">
+          Key Benefits of Client-Side Formatting
+        </h3>
+        <ul class="list-disc pl-4 space-y-1.5 text-muted-foreground">
+          <li><strong>Absolute Privacy:</strong> Your JSON is parsed directly in your browser. None of your logs or API responses are sent to our servers.</li>
+          <li><strong>Blazing Fast:</strong> Zero server latency. The formatting and minification are instantaneous.</li>
+          <li><strong>Syntax Diagnostics:</strong> Spot missing commas, brackets, or mismatched quotes instantly with clear visual flags.</li>
+        </ul>
+      </div>
+
+      <div class="space-y-4">
+        <h2 class="text-base font-heading font-semibold text-foreground tracking-wide">
+          Frequently Asked Questions (FAQ)
+        </h2>
+        
+        <FAQAccordion items={faqItems} client:load />
+      </div>
+    </section>
   </div>
 </Layout>

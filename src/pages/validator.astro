@@ -1,0 +1,79 @@
+---
+import Layout from "@/layouts/main.astro";
+import { JSONEditor } from "@/components/JSONEditor";
+import { FAQAccordion } from "@/components/FAQAccordion";
+
+const faqItems = [
+  {
+    id: "faq-1",
+    question: "1. Inspect Mismatched Brackets",
+    answer: "Ensure every opening curly brace { is closed with a }, and every opening array bracket [ is closed with a ]. Our layout highlights structural brackets to help you locate mismatched sets."
+  },
+  {
+    id: "faq-2",
+    question: "2. Escape Control Characters",
+    answer: "Double quotes and backslashes inside your values must be escaped using a backslash. For example: \"description\": \"He said \\\\\"Hello\\\\\"\"."
+  },
+  {
+    id: "faq-3",
+    question: "3. Check Number Formatting",
+    answer: "Numbers in JSON cannot have leading zeroes (e.g. 05 is invalid) and infinity or NaN values are not supported. Numbers must conform to standard integers or floating-point decimals."
+  }
+];
+---
+
+<Layout 
+  title="JSON Validator & Linter Online - Debug JSON Syntax Errors"
+  description="Validate and debug JSON files. Detect syntax errors, missing brackets, unquoted keys, or stray commas with real-time error line highlighting. Free and offline-first linter."
+  canonicalUrl="/validator"
+  currentActive="validator"
+>
+  <div class="container mx-auto px-4 py-6 flex-1 flex flex-col gap-6">
+    <!-- Header introduction -->
+    <div class="shrink-0">
+      <h1 class="text-2xl md:text-3xl font-heading font-bold tracking-tight text-foreground">
+        JSON Validator & Linter
+      </h1>
+      <p class="text-xs md:text-sm text-muted-foreground mt-1.5 max-w-2xl leading-relaxed">
+        Verify that your JSON conforms to the official RFC 8259 specifications. Get detailed diagnostics pointing out the exact line and column containing syntax errors.
+      </p>
+    </div>
+
+    <!-- The Interactive Editor Component -->
+    <div class="flex-1 flex flex-col min-h-0">
+      <JSONEditor client:load mode="validator" />
+    </div>
+
+    <!-- SEO & Documentation Content Section -->
+    <section class="border-t border-border/60 pt-10 mt-6 grid grid-cols-1 md:grid-cols-2 gap-8 text-xs leading-relaxed max-w-5xl">
+      <div class="space-y-4">
+        <h2 class="text-base font-heading font-semibold text-foreground tracking-wide">
+          What is JSON Validation?
+        </h2>
+        <p class="text-muted-foreground">
+          JSON is a highly strict format. Unlike standard JavaScript objects, JSON does not tolerate loose syntax. If a single comma is missing, or if you use single quotes instead of double quotes, parsers in languages like Python, Java, or Go will fail to execute, causing application crashes.
+        </p>
+        <p class="text-muted-foreground">
+          A **JSON Linter** analyzes your payload character-by-character to locate syntax discrepancies. Our live validator displays a clean error banner that breaks down what the parser was expecting vs what it found, and highlights the target line in red on our gutter system.
+        </p>
+
+        <h3 class="text-sm font-heading font-medium text-foreground">
+          Common JSON Syntax Violations
+        </h3>
+        <ul class="list-disc pl-4 space-y-1.5 text-muted-foreground">
+          <li><strong>Trailing Commas:</strong> Placing a comma after the final key-value pair in an object or array (e.g. <code>&#123;"a": 1&#125;</code>) is invalid in standard JSON.</li>
+          <li><strong>Single Quotes:</strong> All keys and string values must be enclosed in double quotes (<code>"</code>). Single quotes (<code>'</code>) are strictly invalid.</li>
+          <li><strong>Unquoted Keys:</strong> Keys must always be string-formatted and wrapped in double quotes. <code>&#123;name: "John"&#125;</code> is invalid; it must be <code>&#123;"name": "John"&#125;</code>.</li>
+        </ul>
+      </div>
+
+      <div class="space-y-4">
+        <h2 class="text-base font-heading font-semibold text-foreground tracking-wide">
+          How to Fix Invalid JSON Files
+        </h2>
+        
+        <FAQAccordion items={faqItems} client:load />
+      </div>
+    </section>
+  </div>
+</Layout>
