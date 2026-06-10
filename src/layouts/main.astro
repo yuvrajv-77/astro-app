@@ -5,14 +5,18 @@ interface Props {
   title?: string;
   description?: string;
   canonicalUrl?: string;
+  ogType?: string;
   currentActive?: "formatter" | "validator" | "minifier" | "viewer" | "blog";
+  schemaMarkup?: Record<string, any> | Record<string, any>[];
 }
 
 const {
   title = "DevJSON Sandbox - Free Online JSON Viewer, Formatter & Validator",
   description = "An offline-first, private-by-design developer utility suite. Format, beautify, validate, minify, and inspect JSON in an interactive tree view. No data ever leaves your computer.",
   canonicalUrl,
+  ogType = "website",
   currentActive = "formatter",
+  schemaMarkup,
 } = Astro.props;
 
 // Build absolute canonical URL
@@ -52,7 +56,7 @@ const finalCanonical = canonicalUrl ? `${siteUrl}${canonicalUrl}` : siteUrl;
     <link rel="canonical" href={finalCanonical} />
     
     <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:url" content={finalCanonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -64,10 +68,14 @@ const finalCanonical = canonicalUrl ? `${siteUrl}${canonicalUrl}` : siteUrl;
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={`${siteUrl}/og-image.png`} />
+
+    {schemaMarkup && (
+      <script type="application/ld+json" is:inline set:html={JSON.stringify(schemaMarkup)} />
+    )}
   </head>
   <body class="bg-background text-foreground min-h-screen flex flex-col font-mono selection:bg-primary/20">
     <!-- Header -->
-    <header class="border-b border-border sticky top-0 bg-background/80 backdrop-blur-md z-50">
+    <header class="border-b border-border sticky top-0 bg-background z-50">
       <div class="container mx-auto px-4 h-16 flex items-center justify-between">
         <div class="flex items-center gap-6">
           <a href="/" class="flex items-center gap-2 font-heading font-semibold text-lg tracking-tight hover:opacity-90">
@@ -179,7 +187,7 @@ const finalCanonical = canonicalUrl ? `${siteUrl}${canonicalUrl}` : siteUrl;
           <div>
             <h3 class="font-heading font-semibold text-foreground mb-3 tracking-wide">Security & Privacy</h3>
             <p class="max-w-xs text-xs leading-relaxed">
-              🔒 <strong>100% Offline Processing:</strong> All JSON formatting, minification, and parsing happen entirely inside your web browser. We never transmit your JSON data to any server.
+              <strong>100% Offline Processing:</strong> All JSON formatting, minification, and parsing happen entirely inside your web browser. We never transmit your JSON data to any server.
             </p>
           </div>
           <div>
@@ -195,7 +203,15 @@ const finalCanonical = canonicalUrl ? `${siteUrl}${canonicalUrl}` : siteUrl;
         </div>
         
         <div class="border-t border-border mt-8 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
-          <p>© {new Date().getFullYear()} DevJSON Sandbox. All rights reserved.</p>
+          <div class="flex flex-col md:flex-row items-center gap-4">
+            <p>&copy; {new Date().getFullYear()} DevJSON Sandbox. All rights reserved.</p>
+            <span class="hidden md:inline text-muted-foreground/30">|</span>
+            <div class="flex gap-3">
+              <a href="/privacy" class="hover:text-primary transition-colors">Privacy Policy</a>
+              <span class="text-muted-foreground/30">&bull;</span>
+              <a href="/terms" class="hover:text-primary transition-colors">Terms of Service</a>
+            </div>
+          </div>
           <div class="flex gap-4">
             <span class="inline-flex items-center gap-1.5 text-primary">
               <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>

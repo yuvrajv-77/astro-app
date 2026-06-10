@@ -20,6 +20,34 @@ const faqItems = [
     answer: "We currently support formatting, minification, tree-view syntax parsing, and raw text exports. Schema validation and converter integrations are planned in our roadmap."
   }
 ];
+const schemaMarkup = [
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "DevJSON Formatter & Viewer",
+    "operatingSystem": "All",
+    "applicationCategory": "DeveloperApplication",
+    "browserRequirements": "Requires HTML5 compatible browser",
+    "description": "Free, secure, and offline-first JSON formatter and viewer. Beautify messy JSON, collapse nodes inside an interactive tree inspector, and copy paths.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqItems.map(item => ({
+      "@type": "Question",
+      "name": item.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.answer
+      }
+    }))
+  }
+];
 ---
 
 <Layout 
@@ -27,6 +55,7 @@ const faqItems = [
   description="Free, secure, and offline-first JSON formatter and viewer. Beautify messy JSON, collapse nodes inside an interactive tree inspector, validate syntax errors, and copy paths. 100% private in-browser tool."
   canonicalUrl="/"
   currentActive="formatter"
+  schemaMarkup={schemaMarkup}
 >
   <div class="container mx-auto px-4 py-6 flex-1 flex flex-col gap-6">
     <!-- Header introduction -->

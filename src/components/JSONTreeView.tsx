@@ -101,7 +101,7 @@ export const JSONTreeView: React.FC<TreeViewProps> = ({
       </div>
 
       {/* Sticky Interactive Breadcrumbs Status Bar */}
-      <div className="sticky bottom-0 left-0 right-0 border-t border-border/40 bg-card/90 backdrop-blur-md px-3.5 py-1.5 h-8 flex items-center justify-between text-[10px] font-mono shrink-0 select-text z-10">
+      <div className="sticky bottom-0 left-0 right-0 border-t border-border bg-card px-3.5 py-1.5 h-8 flex items-center justify-between text-[10px] font-mono shrink-0 select-text z-10">
         <div className="flex-1 overflow-x-auto no-scrollbar scroll-smooth">
           {renderBreadcrumbs()}
         </div>

@@ -20,6 +20,34 @@ const faqItems = [
     answer: "When inspecting complex JSON (like deep nesting in REST API payloads), finding the query path for a key can be tedious. Hovering over a key in our Tree Explorer reveals a 'Copy Path' button that instantly copies the JavaScript access path (e.g. `payload.data.users[0].address.zipcode`) directly to your clipboard."
   }
 ];
+const schemaMarkup = [
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "DevJSON Viewer",
+    "operatingSystem": "All",
+    "applicationCategory": "DeveloperApplication",
+    "browserRequirements": "Requires HTML5 compatible browser",
+    "description": "Inspect and explore your JSON data in an interactive tree view. Search nodes, collapse nesting levels, and copy JavaScript query paths instantly.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqItems.map(item => ({
+      "@type": "Question",
+      "name": item.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.answer
+      }
+    }))
+  }
+];
 ---
 
 <Layout 
@@ -27,6 +55,7 @@ const faqItems = [
   description="Inspect and explore your JSON data in an interactive tree view. Search nodes, collapse nesting levels, and copy JavaScript query paths instantly. 100% private in-browser tool."
   canonicalUrl="/json-viewer"
   currentActive="viewer"
+  schemaMarkup={schemaMarkup}
 >
   <div class="container mx-auto px-4 py-6 flex-1 flex flex-col gap-6">
     <!-- Header introduction -->

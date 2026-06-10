@@ -11,18 +11,18 @@ const sortedPosts = posts.sort(
 ---
 
 <Layout 
-  title="Developer Documentation & JSON Guides - DevJSON Sandbox"
-  description="Explore comprehensive tutorials and reference documentation for parsing, minifying, and validating JSON data correctly in web applications."
+  title="JSON Guides, Tutorials & Ecosystem News - DevJSON Sandbox"
+  description="Explore practical JSON tutorials, API design guides, validation references, performance tips, security checklists, and recent JSON ecosystem news."
   canonicalUrl="/blog"
   currentActive="blog"
 >
-  <div class="container mx-auto px-4 py-8 max-w-4xl flex-1 flex flex-col gap-6">
+  <div class="container mx-auto px-4 py-8 max-w-6xl flex-1 flex flex-col gap-6">
     <div class="border-b border-border pb-4">
       <h1 class="text-2xl md:text-3xl font-heading font-bold tracking-tight text-foreground">
-        Developer Documentation & Guides
+        JSON Guides, Tutorials & News
       </h1>
       <p class="text-xs md:text-sm text-muted-foreground mt-1.5 leading-relaxed">
-        Reference manuals, deep dives, and formatting tips to streamline your API and configuration workflows.
+        Practical references for JSON formatting, validation, API contracts, security, performance, and the latest ecosystem changes.
       </p>
     </div>
 
@@ -32,14 +32,14 @@ const sortedPosts = posts.sort(
         No articles published yet. Check back soon!
       </div>
     ) : (
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
         {sortedPosts.map((post) => (
           <a href={`/blog/${post.id}`} class="group hover:no-underline block">
             <Card className="border-border bg-card hover:bg-secondary/40 transition-all h-full cursor-pointer flex flex-col justify-between">
               <CardHeader className="p-5">
                 <div class="flex items-center gap-2 text-[10px] text-muted-foreground font-mono mb-2">
                   <span>{post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-                  <span>•</span>
+                  <span>&bull;</span>
                   <span>{post.data.author}</span>
                 </div>
                 <CardTitle className="text-base font-heading font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">

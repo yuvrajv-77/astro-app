@@ -16,8 +16,8 @@ Here is a guide to identifying the most common JSON syntax mistakes and how to f
 
 In standard JavaScript, you can define strings using single quotes (`'`) or backticks (`` ` ``). **In JSON, you must use double quotes (`"`) for all keys and string values.**
 
-*   ❌ **Invalid:** `{'id': '101', "name": 'Alice'}`
-*   ✔ **Valid:** `{"id": "101", "name": "Alice"}`
+*   **Invalid:** `{'id': '101', "name": 'Alice'}`
+*   **Valid:** `{"id": "101", "name": "Alice"}`
 
 If you need to include a quote inside a string value, you must escape it using a backslash:
 `"quote": "He said \\"hello\\""`
@@ -28,14 +28,14 @@ If you need to include a quote inside a string value, you must escape it using a
 
 A trailing comma is a comma placed after the last item in a list or object. While standard JavaScript allows trailing commas, JSON strictly forbids them.
 
-*   ❌ **Invalid Object:**
+*   **Invalid Object:**
     ```json
     {
       "name": "DevJSON Sandbox",
       "status": "active",
     }
     ```
-*   ✔ **Valid Object:**
+*   **Valid Object:**
     ```json
     {
       "name": "DevJSON Sandbox",
@@ -43,8 +43,8 @@ A trailing comma is a comma placed after the last item in a list or object. Whil
     }
     ```
 
-*   ❌ **Invalid Array:** `[10, 20, 30,]`
-*   ✔ **Valid Array:** `[10, 20, 30]`
+*   **Invalid Array:** `[10, 20, 30,]`
+*   **Valid Array:** `[10, 20, 30]`
 
 ---
 
@@ -52,8 +52,8 @@ A trailing comma is a comma placed after the last item in a list or object. Whil
 
 In JavaScript objects, keys do not require quotes unless they contain special characters. In JSON, every key must be wrapped in double quotes.
 
-*   ❌ **Invalid:** `{id: 101, name: "Alice"}`
-*   ✔ **Valid:** `{"id": 101, "name": "Alice"}`
+*   **Invalid:** `{id: 101, name: "Alice"}`
+*   **Valid:** `{"id": 101, "name": "Alice"}`
 
 ---
 

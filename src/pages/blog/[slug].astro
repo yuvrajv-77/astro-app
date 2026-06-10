@@ -13,13 +13,49 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+const siteUrl = "https://devjsonsandbox.pages.dev";
+const postUrl = `${siteUrl}/blog/${post.id}`;
+const imageUrl = `${siteUrl}/og-image.png`;
+const dateModified = post.data.updatedDate ?? post.data.pubDate;
+
+const schemaMarkup = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "@id": `${postUrl}#article`,
+  "headline": post.data.title,
+  "description": post.data.description,
+  "image": [imageUrl],
+  "datePublished": post.data.pubDate.toISOString(),
+  "dateModified": dateModified.toISOString(),
+  "author": {
+    "@type": "Person",
+    "name": post.data.author
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "DevJSON Sandbox",
+    "url": siteUrl,
+    "logo": {
+      "@type": "ImageObject",
+      "url": imageUrl
+    }
+  },
+  "keywords": post.data.tags?.join(", "),
+  "isAccessibleForFree": true,
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": postUrl
+  }
+};
 ---
 
 <Layout 
   title={`${post.data.title} - DevJSON Sandbox`}
   description={post.data.description}
   canonicalUrl={`/blog/${post.id}`}
+  ogType="article"
   currentActive="blog"
+  schemaMarkup={schemaMarkup}
 >
   <article class="container mx-auto px-4 py-8 max-w-2xl flex-1 flex flex-col gap-6">
     {/* Breadcrumb Navigation */}
@@ -31,7 +67,7 @@ const { Content } = await render(post);
     <header class="border-b border-border pb-4 flex flex-col gap-2">
       <div class="flex flex-wrap items-center gap-2 text-[10px] text-muted-foreground font-mono">
         <span>{post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-        <span>•</span>
+        <span>&bull;</span>
         <span>By {post.data.author}</span>
       </div>
       <h1 class="text-xl md:text-3xl font-heading font-bold tracking-tight text-foreground leading-tight">

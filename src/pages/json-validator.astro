@@ -20,6 +20,34 @@ const faqItems = [
     answer: "Currently, our tool validates standard RFC 8259 syntax. Support for validating against a custom JSON Schema is on our roadmap for a future update."
   }
 ];
+const schemaMarkup = [
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "DevJSON Validator",
+    "operatingSystem": "All",
+    "applicationCategory": "DeveloperApplication",
+    "browserRequirements": "Requires HTML5 compatible browser",
+    "description": "Validate and debug your JSON syntax online. Spot missing commas, mismatched braces, unquoted keys, or syntax errors instantly.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqItems.map(item => ({
+      "@type": "Question",
+      "name": item.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.answer
+      }
+    }))
+  }
+];
 ---
 
 <Layout 
@@ -27,6 +55,7 @@ const faqItems = [
   description="Validate and debug your JSON syntax online. Spot missing commas, mismatched braces, unquoted keys, or syntax errors instantly. 100% private and offline-first."
   canonicalUrl="/json-validator"
   currentActive="validator"
+  schemaMarkup={schemaMarkup}
 >
   <div class="container mx-auto px-4 py-6 flex-1 flex flex-col gap-6">
     <!-- Header introduction -->

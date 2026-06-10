@@ -20,6 +20,34 @@ const faqItems = [
     answer: "Because all minification occurs client-side within your browser, the performance depends on your local hardware memory. Generally, JSON files up to 50MB can be minified instantly without browser lag."
   }
 ];
+const schemaMarkup = [
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "DevJSON Minifier",
+    "operatingSystem": "All",
+    "applicationCategory": "DeveloperApplication",
+    "browserRequirements": "Requires HTML5 compatible browser",
+    "description": "Compress, compact, and minify JSON online. Remove unnecessary spacing, newlines, and indentation to optimize API payloads.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqItems.map(item => ({
+      "@type": "Question",
+      "name": item.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.answer
+      }
+    }))
+  }
+];
 ---
 
 <Layout 
@@ -27,6 +55,7 @@ const faqItems = [
   description="Compress, compact, and minify JSON online. Remove unnecessary spacing, newlines, and indentation to optimize API payloads. 100% private client-side minifier."
   canonicalUrl="/json-minifier"
   currentActive="minifier"
+  schemaMarkup={schemaMarkup}
 >
   <div class="container mx-auto px-4 py-6 flex-1 flex flex-col gap-6">
     <!-- Header introduction -->
