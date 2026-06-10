@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ChevronRight, ChevronDown, Copy, Search } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ChevronRight, ChevronDown, Copy } from "lucide-react";
 
 interface TreeViewProps {
   data: any;
@@ -16,7 +15,7 @@ export const JSONTreeView: React.FC<TreeViewProps> = ({
   collapseAll = false,
 }) => {
   return (
-    <div class="font-mono text-xs select-text overflow-x-auto p-4 leading-relaxed">
+    <div className="font-mono text-xs select-text overflow-x-auto p-4 leading-relaxed">
       <TreeNode
         name="root"
         value={data}
@@ -86,23 +85,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
     setTimeout(() => setCopiedPath(false), 1000);
   };
 
-  // Check if search query matches name, value, or child contents
-  const matchesSearch = (val: any, nameStr: string): boolean => {
-    if (!searchQuery) return false;
-    const query = searchQuery.toLowerCase();
-    
-    // Check if key matches
-    if (nameStr.toLowerCase().includes(query)) return true;
-
-    // Check if primitive value matches
-    if (typeof val !== "object" || val === null) {
-      return String(val).toLowerCase().includes(query);
-    }
-
-    return false;
-  };
-
-  const isMatched = matchesSearch(value, String(name));
+  // matchesSearch unused, removed
 
   // Automatically expand if parent or children contains matches
   useEffect(() => {
