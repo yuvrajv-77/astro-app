@@ -132,3 +132,75 @@
     @apply font-mono;
     }
 }
+
+/* Dynamic Font Sizing Core Variables */
+:root {
+  --ui-font-size: 14px;
+  --json-font-size: 12px;
+}
+
+/* UI and JSON font size classes applied dynamically to root */
+.ui-fs-sm {
+  --ui-font-size: 13px;
+  --json-font-size: 11px;
+}
+.ui-fs-md {
+  --ui-font-size: 14px;
+  --json-font-size: 12px;
+}
+.ui-fs-lg {
+  --ui-font-size: 15px;
+  --json-font-size: 14px;
+}
+
+/* Apply UI Font Scaling to workspace containers and elements */
+.ui-scale-container {
+  font-size: var(--ui-font-size) !important;
+}
+
+.ui-scale-container .text-xs,
+.ui-scale-container .text-\[12px\],
+.ui-scale-container .text-\[11px\],
+.ui-scale-container .text-\[10px\],
+.ui-scale-container .text-\[9px\] {
+  font-size: calc(var(--ui-font-size) - 2px) !important; /* Scale small text accordingly */
+}
+
+.ui-scale-container .text-sm,
+.ui-scale-container .text-\[14px\] {
+  font-size: var(--ui-font-size) !important; /* Scale body text accordingly */
+}
+
+/* Direct specific adjustments for Diagnostics HUD values and labels */
+.ui-scale-container .ui-hud-val {
+  font-size: calc(var(--ui-font-size) - 1px) !important;
+}
+
+.ui-scale-container .ui-hud-lbl {
+  font-size: calc(var(--ui-font-size) - 3.5px) !important;
+}
+
+/* Premium Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 0px !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* Firefox scrollbar compatibility */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}

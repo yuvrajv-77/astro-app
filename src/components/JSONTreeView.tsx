@@ -7,6 +7,7 @@ interface TreeViewProps {
   searchQuery?: string;
   expandAll?: boolean;
   collapseAll?: boolean;
+  showBadges?: boolean;
 }
 
 export const JSONTreeView: React.FC<TreeViewProps> = ({
@@ -14,6 +15,7 @@ export const JSONTreeView: React.FC<TreeViewProps> = ({
   searchQuery = "",
   expandAll = false,
   collapseAll = false,
+  showBadges = true,
 }) => {
   const [hoveredPath, setHoveredPath] = useState<string>("");
   const [copiedSegment, setCopiedSegment] = useState<string | null>(null);
@@ -97,6 +99,7 @@ export const JSONTreeView: React.FC<TreeViewProps> = ({
           collapseAll={collapseAll}
           isLast={true}
           onHover={setHoveredPath}
+          showBadges={showBadges}
         />
       </div>
 
@@ -119,6 +122,7 @@ interface TreeNodeProps {
   collapseAll: boolean;
   isLast: boolean;
   onHover: (path: string) => void;
+  showBadges?: boolean;
 }
 
 const TreeNode: React.FC<TreeNodeProps> = ({
@@ -130,6 +134,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
   collapseAll,
   isLast,
   onHover,
+  showBadges = true,
 }) => {
   const type = typeof value;
   const isNull = value === null;
@@ -247,7 +252,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
     }
 
     return (
-      <span className={cn("text-[7.5px] font-sans font-medium px-1 py-0.2 rounded border uppercase tracking-wider scale-90 origin-left inline-block select-none", badgeClass)}>
+      <span className={cn("text-[9.5px] font-sans font-medium px-1.5 py-0.5 rounded border uppercase tracking-wider inline-block select-none", badgeClass)}>
         {label}
       </span>
     );
@@ -287,7 +292,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
         )}
 
         {/* Type Badge */}
-        {renderTypeBadge(type, isNull)}
+        {showBadges && renderTypeBadge(type, isNull)}
 
         {/* Value Details */}
         {isCollapsible ? (
@@ -396,6 +401,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
                   collapseAll={collapseAll}
                   isLast={idx === value.length - 1}
                   onHover={onHover}
+                  showBadges={showBadges}
                 />
               );
             })
@@ -413,6 +419,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
                   collapseAll={collapseAll}
                   isLast={idx === keysArray.length - 1}
                   onHover={onHover}
+                  showBadges={showBadges}
                 />
               );
             })

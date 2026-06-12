@@ -1,5 +1,6 @@
 ---
 import "@/styles/global.css"
+import { FontSizeSelector } from "@/components/FontSizeSelector";
 
 interface Props {
   title?: string;
@@ -28,7 +29,7 @@ const finalCanonical = canonicalUrl ? `${siteUrl}${canonicalUrl}` : siteUrl;
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <!-- Theme setup script to prevent layout flash -->
+    <!-- Theme & Font setup script to prevent layout/size flash -->
     <script is:inline>
       const theme = (() => {
         if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
@@ -45,6 +46,10 @@ const finalCanonical = canonicalUrl ? `${siteUrl}${canonicalUrl}` : siteUrl;
         document.documentElement.classList.add('dark');
       }
       window.localStorage.setItem('theme', theme);
+
+      // Font sizes setup
+      const uiSize = (typeof localStorage !== 'undefined' && localStorage.getItem('ui-font-size')) || 'ui-fs-md';
+      document.documentElement.classList.add(uiSize);
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -118,6 +123,11 @@ const finalCanonical = canonicalUrl ? `${siteUrl}${canonicalUrl}` : siteUrl;
         </div>
 
         <div class="flex items-center gap-1.5">
+          <!-- Font Size Selector -->
+          <div class="hidden sm:flex items-center gap-2 border-r border-border pr-2 mr-0.5">
+            <FontSizeSelector client:load />
+          </div>
+
           <!-- Light/Dark Mode Button -->
           <button 
             id="theme-toggle" 
@@ -247,6 +257,8 @@ const finalCanonical = canonicalUrl ? `${siteUrl}${canonicalUrl}` : siteUrl;
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
         updateIcons();
       });
+
+      // Font size selectors management handled by FontSizeSelector React component
     </script>
   </body>
 </html>

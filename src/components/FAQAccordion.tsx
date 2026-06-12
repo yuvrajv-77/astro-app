@@ -13,7 +13,7 @@ interface FAQAccordionProps {
 
 export const FAQAccordion: React.FC<FAQAccordionProps> = ({ items }) => {
   return (
-    <Accordion type="single" collapsible className="w-full border border-border bg-card rounded-lg px-4">
+    <Accordion type="single" collapsible className="w-full border border-border bg-card px-4">
       {items.map((item, idx) => (
         <AccordionItem key={item.id} value={item.id} className={idx === items.length - 1 ? "border-b-0" : ""}>
           <AccordionTrigger className="font-heading text-xs font-semibold py-3 hover:no-underline">

@@ -12,12 +12,22 @@ const faqItems = [
   {
     id: "faq-2",
     question: "How do I use the copy path feature?",
-    answer: "Once you load valid JSON, switch to the \"Tree Viewer\" tab. Hover your cursor over any key, and click the \"Copy Path\" button on the right. It will save the exact path (e.g. store.books[1].title) directly to your clipboard."
+    answer: "Once you load valid JSON, switch to the \"Tree Explorer\" tab. Hover your cursor over any tree node, and the active path will show in the breadcrumbs bar at the bottom. Click any breadcrumb segment to copy the path up to that point, or click 'Copy Path' directly on the node."
   },
   {
     id: "faq-3",
-    question: "Does this formatter support JSON Schema or CSV exports?",
-    answer: "We currently support formatting, minification, tree-view syntax parsing, and raw text exports. Schema validation and converter integrations are planned in our roadmap."
+    question: "What format conversions does DevJSON Sandbox support?",
+    answer: "You can instantly convert valid JSON data into clean XML structures, CSV spreadsheet formats, or YAML document files. Use the 'Format Converters' buttons inside the central Controls Deck to trigger conversions."
+  },
+  {
+    id: "faq-4",
+    question: "How does the Image Hover Previewer work?",
+    answer: "If any string value inside your JSON data is a web URL pointing to an image file (e.g. ending in .png, .jpg, .svg, .webp), our Tree Explorer will render a preview eye icon next to the link. Hovering over this icon displays the image overlay dynamically."
+  },
+  {
+    id: "faq-5",
+    question: "What metrics are computed in the real-time Diagnostics HUD?",
+    answer: "The Diagnostics HUD calculates file byte sizes, total node counts, recursive nesting levels, character/line counts, and the browser's exact JSON parsing speed in milliseconds on every keystroke."
   }
 ];
 const schemaMarkup = [
