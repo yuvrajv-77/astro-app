@@ -9,15 +9,14 @@ import {
   Maximize2,
   Minimize2,
   AlertTriangle,
-  Search,
-  Tag
+  Search
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { ButtonGroup } from "@/components/ui/button-group";
 import { Input } from "@/components/ui/input";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Checkbox } from "@/components/ui/checkbox";
 import { JSONTreeView } from "../JSONTreeView";
 
 interface OutputPanelProps {
@@ -25,7 +24,7 @@ interface OutputPanelProps {
   parsedData: unknown;
   outputText: string;
   inputText: string;
-  outputMode: "json" | "xml" | "csv" | "yaml";
+  outputMode: "json" | "xml" | "csv" | "yaml" | "typescript";
   outputSize: number;
   activeTab: string;
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
@@ -105,7 +104,7 @@ export const OutputPanel: React.FC<OutputPanelProps> = ({
                 {outputMode}
               </span>
 
-              <ButtonGroup className="bg-secondary/20 border border-border/80 h-7.5 rounded overflow-hidden">
+              <div className="flex items-center gap-1">
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
@@ -114,12 +113,12 @@ export const OutputPanel: React.FC<OutputPanelProps> = ({
                       variant="ghost"
                       size="sm"
                       aria-label="Copy output data"
-                      className="h-full text-[11px] font-sans text-muted-foreground hover:text-foreground gap-1.5 cursor-pointer border-0 rounded-none hover:bg-secondary/45"
+                      className="h-7.5 w-7.5 p-0 text-muted-foreground hover:text-foreground cursor-pointer hover:bg-secondary/50"
                     >
                       {copiedOutput ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent className="bg-popover text-popover-foreground border border-border text-[10px] py-1">Copy output to clipboard</TooltipContent>
+                  <TooltipContent className="bg-popover text-popover-foreground border border-border text-[10px] py-1 px-2.5">Copy output to clipboard</TooltipContent>
                 </Tooltip>
 
                 <Tooltip>
@@ -130,12 +129,12 @@ export const OutputPanel: React.FC<OutputPanelProps> = ({
                       variant="ghost"
                       size="sm"
                       aria-label="Download output file"
-                      className="h-full text-[11px] font-sans text-muted-foreground hover:text-foreground gap-1.5 cursor-pointer border-l border-border/85 rounded-none hover:bg-secondary/45"
+                      className="h-7.5 w-7.5 p-0 text-muted-foreground hover:text-foreground cursor-pointer hover:bg-secondary/50"
                     >
                       <Download size={12} />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent className="bg-popover text-popover-foreground border border-border text-[10px] py-1">Download as file</TooltipContent>
+                  <TooltipContent className="bg-popover text-popover-foreground border border-border text-[10px] py-1 px-2.5">Download as file</TooltipContent>
                 </Tooltip>
 
                 <Tooltip>
@@ -145,16 +144,16 @@ export const OutputPanel: React.FC<OutputPanelProps> = ({
                       variant="ghost"
                       size="sm"
                       aria-label={fullscreenPanel === "output" ? "Exit Fullscreen" : "Fullscreen Output"}
-                      className="h-full text-[11px] font-sans text-muted-foreground hover:text-foreground gap-1.5 cursor-pointer border-l border-border/85 rounded-none hover:bg-secondary/45 px-2"
+                      className="h-7.5 w-7.5 p-0 text-muted-foreground hover:text-foreground cursor-pointer hover:bg-secondary/50"
                     >
                       {fullscreenPanel === "output" ? <Minimize2 size={12} /> : <Maximize2 size={12} />}
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent className="bg-popover text-popover-foreground border border-border text-[10px] py-1">
+                  <TooltipContent className="bg-popover text-popover-foreground border border-border text-[10px] py-1 px-2.5">
                     {fullscreenPanel === "output" ? "Exit Fullscreen" : "Fullscreen Output"}
                   </TooltipContent>
                 </Tooltip>
-              </ButtonGroup>
+              </div>
             </div>
           </div>
 
@@ -205,44 +204,49 @@ export const OutputPanel: React.FC<OutputPanelProps> = ({
                     />
                   </div>
 
-                  {/* Toggle Type Badges Button */}
+                  {/* Toggle Type Badges Checkbox */}
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button
-                        onClick={() => setShowBadges(prev => !prev)}
-                        variant={showBadges ? "secondary" : "ghost"}
-                        size="sm"
-                        className="h-7.5 px-2.5 text-[10px] font-sans gap-1.5 cursor-pointer border border-border/80 rounded-none shrink-0"
-                        aria-label="Toggle data type badges"
-                      >
-                        <Tag size={11} className={showBadges ? "text-primary" : "text-muted-foreground"} />
-                        <span>Badges</span>
-                      </Button>
+                      <div className="flex items-center gap-1.5 h-7.5 px-2 bg-secondary/35 border border-border/80 rounded-none shrink-0 select-none">
+                        <Checkbox
+                          id="show-badges-checkbox"
+                          checked={showBadges}
+                          onCheckedChange={(checked) => setShowBadges(!!checked)}
+                          className="cursor-pointer"
+                          aria-label="Toggle data type badges"
+                        />
+                        <label
+                          htmlFor="show-badges-checkbox"
+                          className="text-[10px] font-sans text-muted-foreground hover:text-foreground cursor-pointer select-none font-medium pr-0.5"
+                        >
+                          Badges
+                        </label>
+                      </div>
                     </TooltipTrigger>
-                    <TooltipContent className="bg-popover text-popover-foreground border border-border text-[9px] py-0.5 px-1.5 rounded-none">
+                    <TooltipContent className="bg-popover text-popover-foreground border border-border text-[10px] py-1 px-2.5">
                       {showBadges ? "Hide Type Badges" : "Show Type Badges"}
                     </TooltipContent>
                   </Tooltip>
 
-                  {/* ButtonGroup for Expand/Collapse */}
-                  <ButtonGroup className="border border-border/80 h-7.5 rounded-none overflow-hidden">
+                  {/* Standalone buttons for Expand/Collapse */}
+                  <div className="flex items-center gap-1">
                     <Button
-                      variant="ghost"
+                      variant="outline"
                       size="sm"
                       onClick={triggerExpandAll}
-                      className="h-full text-[10px] font-sans cursor-pointer hover:bg-secondary/45 border-0 rounded-none px-2.5"
+                      className="h-7.5 px-2.5 text-[10px] font-sans cursor-pointer hover:bg-secondary/60 border border-border/80"
                     >
                       Expand
                     </Button>
                     <Button
-                      variant="ghost"
+                      variant="outline"
                       size="sm"
                       onClick={triggerCollapseAll}
-                      className="h-full text-[10px] font-sans cursor-pointer hover:bg-secondary/45 border-l border-border/85 rounded-none px-2.5"
+                      className="h-7.5 px-2.5 text-[10px] font-sans cursor-pointer hover:bg-secondary/60 border border-border/80"
                     >
                       Collapse
                     </Button>
-                  </ButtonGroup>
+                  </div>
                 </div>
                 {/* Collapsible Tree Area */}
                 <div className="flex-1 overflow-y-auto select-text min-h-0">

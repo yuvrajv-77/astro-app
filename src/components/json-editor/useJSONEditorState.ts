@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { jsonToXml, jsonToCsv, jsonToYaml } from "@/lib/converters";
+import { jsonToXml, jsonToCsv, jsonToYaml, jsonToTypescript } from "@/lib/converters";
 import { SAMPLE_JSON } from "./constants";
 
 export interface HistoryItem {
@@ -19,7 +19,7 @@ export const useJSONEditorState = ({ mode }: UseJSONEditorStateProps) => {
   const [parsedData, setParsedData] = useState<unknown>(null);
 
   // Layout states
-  const [outputMode, setOutputMode] = useState<"json" | "xml" | "csv" | "yaml">("json");
+  const [outputMode, setOutputMode] = useState<"json" | "xml" | "csv" | "yaml" | "typescript">("json");
   const [activeTab, setActiveTab] = useState<string>("tree");
 
   // Format settings
@@ -140,7 +140,7 @@ export const useJSONEditorState = ({ mode }: UseJSONEditorStateProps) => {
   }, [mode]);
 
   // Main utility processor
-  const runProcessing = useCallback((shouldSaveHistory = true, targetFormat: "json" | "xml" | "csv" | "yaml" | "minify" = "json") => {
+  const runProcessing = useCallback((shouldSaveHistory = true, targetFormat: "json" | "xml" | "csv" | "yaml" | "minify" | "typescript" = "json") => {
     if (!inputText.trim()) return;
 
     try {
@@ -180,6 +180,11 @@ export const useJSONEditorState = ({ mode }: UseJSONEditorStateProps) => {
         setOutputText(yaml);
         setOutputMode("yaml");
         setActiveTab("text"); // YAML is viewable as plain text
+      } else if (targetFormat === "typescript") {
+        const ts = jsonToTypescript(parsed);
+        setOutputText(ts);
+        setOutputMode("typescript");
+        setActiveTab("text"); // TypeScript is viewable as plain text
       }
 
       // Save to history if requested

@@ -178,3 +178,57 @@ export function jsonToYaml(obj: any, indentSize: number = 2): string {
 
   return formatYaml(obj, 0);
 }
+
+/**
+ * Converts a JSON value/object to a TypeScript interface string.
+ */
+export function jsonToTypescript(obj: unknown, interfaceName: string = "RootObject"): string {
+  const types = new Map<string, string>();
+
+  const toPascalCase = (str: string): string => {
+    return str
+      .replace(/[^a-zA-Z0-9]/g, "_")
+      .replace(/(^\w|_\w)/g, (m) => m.replace("_", "").toUpperCase());
+  };
+
+  const generateType = (val: unknown, name: string): string => {
+    if (val === null) return "null";
+    if (val === undefined) return "undefined";
+    
+    if (Array.isArray(val)) {
+      if (val.length === 0) return "unknown[]";
+      const itemTypes = Array.from(new Set(val.map(item => typeof item)));
+      if (itemTypes.length === 1) {
+        const type = itemTypes[0];
+        if (type === "object") {
+          const subName = toPascalCase(name) + "Item";
+          generateType(val[0], subName);
+          return `${subName}[]`;
+        }
+        return `${type}[]`;
+      }
+      return "unknown[]";
+    }
+
+    if (typeof val === "object") {
+      const subInterfaceName = toPascalCase(name);
+      let subInterface = `interface ${subInterfaceName} {\n`;
+      const record = val as Record<string, unknown>;
+      for (const [key, value] of Object.entries(record)) {
+        const safeKey = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key) ? key : `"${key}"`;
+        const propType = generateType(value, key);
+        subInterface += `  ${safeKey}: ${propType};\n`;
+      }
+      subInterface += "}";
+      types.set(subInterfaceName, subInterface);
+      return subInterfaceName;
+    }
+
+    return typeof val;
+  };
+
+  generateType(obj, interfaceName);
+
+  return Array.from(types.values()).join("\n\n");
+}
+

@@ -84,7 +84,7 @@ const schemaMarkup = [
     </div>
 
     <!-- SEO & Documentation Content Section -->
-    <section class="border-t border-border/60 pt-10 mt-6 grid grid-cols-1 md:grid-cols-2 gap-8 text-xs leading-relaxed max-w-5xl">
+    <section class="border-t border-border/60 pt-10 mt-6 grid grid-cols-1 md:grid-cols-3 gap-8 text-xs leading-relaxed">
       <div class="space-y-4">
         <h2 class="text-base font-heading font-semibold text-foreground tracking-wide">
           What is a JSON Formatter & Viewer?
@@ -110,8 +110,30 @@ const schemaMarkup = [
         <h2 class="text-base font-heading font-semibold text-foreground tracking-wide">
           Frequently Asked Questions (FAQ)
         </h2>
-        
         <FAQAccordion items={faqItems} client:load />
+      </div>
+
+      <div class="space-y-4">
+        <h2 class="text-base font-heading font-semibold text-foreground tracking-wide">
+          Pro Tips & Best Practices
+        </h2>
+        <div class="space-y-3 text-muted-foreground">
+          <p>
+            <strong>Validate before formatting:</strong> If your JSON payload has hidden syntax errors (like trailing commas or unescaped quotes), formatting might fail. Use our built-in validator flags to clean up structure first.
+          </p>
+          <p>
+            <strong>Keyboard Shortcuts:</strong> Pressing <kbd class="px-1.5 py-0.5 bg-secondary text-foreground text-[10px] rounded border border-border">Ctrl + F</kbd> (or <kbd class="px-1.5 py-0.5 bg-secondary text-foreground text-[10px] rounded border border-border">Cmd + F</kbd>) inside the editor opens a powerful search and replace widget to clean up key-value pairs.
+          </p>
+          <div class="p-3 border border-border/50 bg-secondary/15 rounded-md space-y-2">
+            <h4 class="font-semibold text-foreground text-[11px]">JSON Developer Suite Tools</h4>
+            <ul class="space-y-1.5 list-none text-[11px]">
+              <li><a href="/json-validator" class="text-primary hover:underline font-medium flex items-center gap-1.5"><span>✓</span> JSON Syntax Validator</a></li>
+              <li><a href="/json-minifier" class="text-primary hover:underline font-medium flex items-center gap-1.5"><span>✓</span> JSON Minifier</a></li>
+              <li><a href="/json-viewer" class="text-primary hover:underline font-medium flex items-center gap-1.5"><span>✓</span> Interactive Tree Viewer</a></li>
+              <li><a href="/json-diff" class="text-primary hover:underline font-medium flex items-center gap-1.5"><span>✓</span> Side-by-Side Diff Viewer</a></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
   </div>

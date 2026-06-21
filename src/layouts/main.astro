@@ -7,7 +7,7 @@ interface Props {
   description?: string;
   canonicalUrl?: string;
   ogType?: string;
-  currentActive?: "formatter" | "validator" | "minifier" | "viewer" | "blog";
+  currentActive?: "formatter" | "validator" | "minifier" | "viewer" | "blog" | "diff";
   schemaMarkup?: Record<string, any> | Record<string, any>[];
 }
 
@@ -114,6 +114,12 @@ const finalCanonical = canonicalUrl ? `${siteUrl}${canonicalUrl}` : siteUrl;
               Viewer
             </a>
             <a 
+              href="/json-diff" 
+              class={`px-3 py-1.5 rounded-md transition-colors ${currentActive === 'diff' ? 'bg-secondary text-secondary-foreground font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              Diff Tool
+            </a>
+            <a 
               href="/blog" 
               class={`px-3 py-1.5 rounded-md transition-colors ${currentActive === 'blog' ? 'bg-secondary text-secondary-foreground font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
             >
@@ -173,6 +179,9 @@ const finalCanonical = canonicalUrl ? `${siteUrl}${canonicalUrl}` : siteUrl;
         <a href="/json-viewer" class={`flex-1 text-center py-2.5 transition-colors whitespace-nowrap px-4 ${currentActive === 'viewer' ? 'bg-secondary/70 text-foreground font-semibold' : 'text-muted-foreground'}`}>
           Viewer
         </a>
+        <a href="/json-diff" class={`flex-1 text-center py-2.5 transition-colors whitespace-nowrap px-4 ${currentActive === 'diff' ? 'bg-secondary/70 text-foreground font-semibold' : 'text-muted-foreground'}`}>
+          Diff Tool
+        </a>
         <a href="/blog" class={`flex-1 text-center py-2.5 transition-colors whitespace-nowrap px-4 ${currentActive === 'blog' ? 'bg-secondary/70 text-foreground font-semibold' : 'text-muted-foreground'}`}>
           Guides
         </a>
@@ -207,6 +216,7 @@ const finalCanonical = canonicalUrl ? `${siteUrl}${canonicalUrl}` : siteUrl;
               <li><a href="/json-validator" class="hover:text-primary transition-colors">JSON Validator</a></li>
               <li><a href="/json-minifier" class="hover:text-primary transition-colors">JSON Minifier</a></li>
               <li><a href="/json-viewer" class="hover:text-primary transition-colors">JSON Tree Viewer</a></li>
+              <li><a href="/json-diff" class="hover:text-primary transition-colors">JSON Diff Viewer</a></li>
               <li><a href="/blog" class="hover:text-primary transition-colors">Guides & Tutorials</a></li>
             </ul>
           </div>

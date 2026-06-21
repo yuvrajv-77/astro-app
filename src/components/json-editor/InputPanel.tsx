@@ -15,7 +15,6 @@ import {
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface InputPanelProps {
@@ -115,7 +114,7 @@ export const InputPanel: React.FC<InputPanelProps> = ({
     <TooltipProvider>
       <Card
         className={cn(
-          "py-0 border-border bg-card flex flex-col h-full transition-all duration-300 relative overflow-hidden focus-within:ring-1 focus-within:ring-primary/40 lg:sticky lg:top-[5.5rem] self-start lg:h-[calc(100vh-7.5rem)] w-full",
+          "py-0 border-border bg-card flex flex-col h-full transition-[border-color,background-color,transform] duration-300 relative overflow-hidden focus-within:ring-1 focus-within:ring-primary/40 lg:sticky lg:top-[5.5rem] self-start lg:h-[calc(100vh-7.5rem)] w-full",
           isDragging ? "border-primary bg-primary/5 scale-[0.995]" : "",
           fullscreenPanel === "input" ? "fixed inset-0 z-50 w-screen h-screen m-0 rounded-none bg-card p-0" : ""
         )}
@@ -142,27 +141,7 @@ export const InputPanel: React.FC<InputPanelProps> = ({
           </div>
 
           {/* Header Actions Deck */}
-          <div className="flex items-center gap-1">
-            {/* Fullscreen Button */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  onClick={() => setFullscreenPanel(prev => prev === "input" ? "none" : "input")}
-                  variant="ghost"
-                  size="sm"
-                  className="h-7.5 w-7.5 p-0 text-muted-foreground hover:text-foreground cursor-pointer"
-                  aria-label={fullscreenPanel === "input" ? "Exit Fullscreen" : "Fullscreen Input"}
-                >
-                  {fullscreenPanel === "input" ? <Minimize2 size={12} /> : <Maximize2 size={12} />}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent className="bg-popover text-popover-foreground border border-border text-[9px] py-0.5 px-1.5">
-                {fullscreenPanel === "input" ? "Exit Fullscreen" : "Fullscreen Input"}
-              </TooltipContent>
-            </Tooltip>
-
-            <Separator orientation="vertical" className="h-4 mx-1" />
-
+          <div className="flex items-center gap-1.5">
             {/* Sample JSON Button */}
             <Tooltip>
               <TooltipTrigger asChild>
@@ -170,48 +149,14 @@ export const InputPanel: React.FC<InputPanelProps> = ({
                   onClick={loadSample}
                   variant="ghost"
                   size="sm"
-                  className="h-7.5 px-2 text-[11px] font-sans text-muted-foreground hover:text-foreground cursor-pointer gap-1"
+                  className="h-7.5 px-2 text-[11px] font-sans text-muted-foreground hover:text-foreground cursor-pointer gap-1 hover:bg-secondary/45"
                   aria-label="Load Sample JSON"
                 >
                   <Sparkles size={11} className="text-amber-500" />
                   <span className="hidden md:inline">Sample JSON</span>
                 </Button>
               </TooltipTrigger>
-              <TooltipContent className="bg-popover text-popover-foreground border border-border text-[9px] py-0.5 px-1.5">Load Sample JSON</TooltipContent>
-            </Tooltip>
-
-            <Separator orientation="vertical" className="h-4 mx-1" />
-
-            {/* Print Button */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  onClick={handlePrint}
-                  variant="ghost"
-                  size="sm"
-                  className="h-7.5 w-7.5 p-0 text-muted-foreground hover:text-foreground cursor-pointer"
-                  aria-label="Print raw JSON"
-                >
-                  <Printer size={12} />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent className="bg-popover text-popover-foreground border border-border text-[9px] py-0.5 px-1.5">Print Input</TooltipContent>
-            </Tooltip>
-
-            {/* Copy Button */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  onClick={copyInput}
-                  variant="ghost"
-                  size="sm"
-                  className="h-7.5 w-7.5 p-0 text-muted-foreground hover:text-foreground cursor-pointer"
-                  aria-label="Copy input raw JSON"
-                >
-                  {copiedInput ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent className="bg-popover text-popover-foreground border border-border text-[9px] py-0.5 px-1.5">Copy Input</TooltipContent>
+              <TooltipContent className="bg-popover text-popover-foreground border border-border text-[10px] py-1 px-2.5">Load Sample JSON</TooltipContent>
             </Tooltip>
 
             {/* Clear Button */}
@@ -227,8 +172,56 @@ export const InputPanel: React.FC<InputPanelProps> = ({
                   <Trash2 size={12} />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent className="bg-popover text-popover-foreground border border-border text-[9px] py-0.5 px-1.5">Clear Editor</TooltipContent>
+              <TooltipContent className="bg-popover text-popover-foreground border border-border text-[10px] py-1 px-2.5">Clear Editor</TooltipContent>
             </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={copyInput}
+                  variant="ghost"
+                  size="sm"
+                  className="h-7.5 w-7.5 p-0 text-muted-foreground hover:text-foreground cursor-pointer hover:bg-secondary/50"
+                  aria-label="Copy input raw JSON"
+                >
+                  {copiedInput ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent className="bg-popover text-popover-foreground border border-border text-[10px] py-1 px-2.5">Copy Input</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={handlePrint}
+                  variant="ghost"
+                  size="sm"
+                  className="h-7.5 w-7.5 p-0 text-muted-foreground hover:text-foreground cursor-pointer hover:bg-secondary/50"
+                  aria-label="Print raw JSON"
+                >
+                  <Printer size={12} />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent className="bg-popover text-popover-foreground border border-border text-[10px] py-1 px-2.5">Print Input</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={() => setFullscreenPanel(prev => prev === "input" ? "none" : "input")}
+                  variant="ghost"
+                  size="sm"
+                  className="h-7.5 w-7.5 p-0 text-muted-foreground hover:text-foreground cursor-pointer hover:bg-secondary/50"
+                  aria-label={fullscreenPanel === "input" ? "Exit Fullscreen" : "Fullscreen Input"}
+                >
+                  {fullscreenPanel === "input" ? <Minimize2 size={12} /> : <Maximize2 size={12} />}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent className="bg-popover text-popover-foreground border border-border text-[10px] py-1 px-2.5">
+                {fullscreenPanel === "input" ? "Exit Fullscreen" : "Fullscreen Input"}
+              </TooltipContent>
+            </Tooltip>
+
           </div>
         </div>
 

@@ -1,0 +1,127 @@
+---
+import Layout from "@/layouts/main.astro";
+import { JSONDiff } from "@/components/JSONDiff";
+import { FAQAccordion } from "@/components/FAQAccordion";
+
+const faqItems = [
+  {
+    id: "diff-faq-1",
+    question: "How does the JSON Diff tool compare files?",
+    answer: "Our tool parses both JSON inputs, normalizes their keys, applies proper indentation (if auto-format is enabled), and runs a line-by-line Longest Common Subsequence (LCS) comparison. Deleted lines are highlighted in red on the left, and added lines are highlighted in green on the right."
+  },
+  {
+    id: "diff-faq-2",
+    question: "Is my comparison data kept private?",
+    answer: "Yes. Absolutely all operations—including parsing, pretty-printing, and diff calculation—run locally in your web browser. No code or data is transmitted to our servers."
+  },
+  {
+    id: "diff-faq-3",
+    question: "Does it compare structural differences or raw text?",
+    answer: "If 'Auto-format inputs' is checked (default), it structures and reformats both JSON strings before diffing. This prevents whitespace, indentation, or newline discrepancies from cluttering the comparative output, highlighting only actual data modifications."
+  }
+];
+
+const schemaMarkup = [
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "DevJSON Diff & Compare",
+    "operatingSystem": "All",
+    "applicationCategory": "DeveloperApplication",
+    "browserRequirements": "Requires HTML5 compatible browser",
+    "description": "Free, secure, and offline-first JSON diff viewer. Compare two JSON files side-by-side, highlight differences, additions, deletions, and sync scrolling.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqItems.map(item => ({
+      "@type": "Question",
+      "name": item.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.answer
+      }
+    }))
+  }
+];
+---
+
+<Layout 
+  title="JSON Diff - Compare JSON Files Side-by-Side Online"
+  description="Compare two JSON structures side-by-side with our free offline-first JSON Diff tool. Highlight additions, removals, and modifications with synced scrolling. 100% private."
+  canonicalUrl="/json-diff"
+  currentActive="diff"
+  schemaMarkup={schemaMarkup}
+>
+  <div class="container mx-auto px-4 py-6 flex-1 flex flex-col gap-6">
+    <!-- Header introduction -->
+    <div class="shrink-0">
+      <h1 class="text-2xl md:text-3xl font-heading font-bold tracking-tight text-foreground">
+        JSON Diff Viewer
+      </h1>
+      <p class="text-xs md:text-sm text-muted-foreground mt-1.5 leading-relaxed">
+        Paste two JSON objects below to compare differences side-by-side. All comparison calculations are processed client-side for complete data privacy.
+      </p>
+    </div>
+
+    <!-- Future Ad Slot: Top Leaderboard Banner -->
+    <div 
+      class="hidden w-full h-24 bg-secondary/15 border border-border flex items-center justify-center text-xs text-muted-foreground select-none shrink-0 mb-2 rounded-sm"
+      id="top-ad-slot"
+    >
+      <!-- Reserved for future Ads integration (e.g. Google AdSense / Carbon Ads) -->
+      <span>Advertisement</span>
+    </div>
+
+    <!-- The Interactive Diff Component -->
+    <div class="flex-1 flex flex-col min-h-0">
+      <JSONDiff client:load />
+    </div>
+
+    <!-- Future Ad Slot: Bottom Leaderboard Banner -->
+    <div 
+      class="hidden w-full h-24 bg-secondary/15 border border-border flex items-center justify-center text-xs text-muted-foreground select-none shrink-0 mt-4 rounded-sm"
+      id="bottom-ad-slot"
+    >
+      <!-- Reserved for future Ads integration -->
+      <span>Advertisement</span>
+    </div>
+
+    <!-- SEO & Documentation Content Section -->
+    <section class="border-t border-border/60 pt-10 mt-6 grid grid-cols-1 md:grid-cols-2 gap-8 text-xs leading-relaxed max-w-5xl">
+      <div class="space-y-4">
+        <h2 class="text-base font-heading font-semibold text-foreground tracking-wide">
+          What is a JSON Diff Tool?
+        </h2>
+        <p class="text-muted-foreground">
+          In software engineering, JSON payloads change constantly during API migrations, configuration adjustments, or version updates. Tracking modifications manually in multi-line nested files is time-consuming and error-prone.
+        </p>
+        <p class="text-muted-foreground">
+          Our <strong>JSON Diff Viewer</strong> runs a line-by-line difference calculation directly inside your browser. By enabling <strong>Auto-format inputs</strong>, both inputs are automatically parsed and prettified with matching indentation keys, allowing you to focus purely on content modifications rather than whitespaces.
+        </p>
+
+        <h3 class="text-sm font-heading font-medium text-foreground">
+          Advanced Productivity Features
+        </h3>
+        <ul class="list-disc pl-4 space-y-1.5 text-muted-foreground">
+          <li><strong>Synced Scrollbars:</strong> Scrolling either the original or modified panel automatically scrolls the counterpart panel to keep visual lines aligned.</li>
+          <li><strong>Side-by-Side Comparison:</strong> Side-by-side alignment structures insert empty spacers to align added or deleted lines on the same visual height.</li>
+          <li><strong>Syntax Validation:</strong> Identifies invalid formats in either input box and triggers explicit error reports before diff compilation.</li>
+        </ul>
+      </div>
+
+      <div class="space-y-4">
+        <h2 class="text-base font-heading font-semibold text-foreground tracking-wide">
+          Frequently Asked Questions (FAQ)
+        </h2>
+        
+        <FAQAccordion items={faqItems} client:load />
+      </div>
+    </section>
+  </div>
+</Layout>

@@ -22,7 +22,8 @@ import {
   Info,
   Loader2,
   AlertTriangle,
-  FileUp
+  FileUp,
+  Braces
 } from "lucide-react";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -55,7 +56,7 @@ interface ControlDeckProps {
   validationStatus: "idle" | "valid" | "invalid";
   inputText: string;
   outputText: string;
-  outputMode: "json" | "xml" | "csv" | "yaml";
+  outputMode: "json" | "xml" | "csv" | "yaml" | "typescript";
   setActiveTab: (val: string) => void;
   // History dialog states & methods
   historyList: HistoryItem[];
@@ -76,7 +77,7 @@ interface ControlDeckProps {
   handleFileUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
   // Actions
   triggerPrimaryAction: () => void;
-  runProcessing: (shouldSaveHistory?: boolean, targetFormat?: "json" | "xml" | "csv" | "yaml" | "minify") => void;
+  runProcessing: (shouldSaveHistory?: boolean, targetFormat?: "json" | "xml" | "csv" | "yaml" | "minify" | "typescript") => void;
   downloadOutput: () => void;
   handleClear: () => void;
   // Diagnostics
@@ -368,6 +369,16 @@ export const ControlDeck: React.FC<ControlDeckProps> = ({
                 >
                   <FileText size={12} className="text-emerald-400" />
                   <span>Convert JSON to YAML</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => runProcessing(true, "typescript")}
+                  disabled={!inputText.trim() || validationStatus === "invalid"}
+                  className="h-8.5 text-[11px] justify-start px-3 gap-2 text-left cursor-pointer hover:bg-secondary/60 border-border/85"
+                >
+                  <Braces size={12} className="text-blue-400" />
+                  <span>Convert JSON to TypeScript</span>
                 </Button>
               </div>
             </div>
