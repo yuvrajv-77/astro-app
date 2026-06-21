@@ -1,0 +1,97 @@
+---
+import Layout from "@/layouts/main.astro";
+---
+
+<Layout 
+  title="About Us - DevJSON Sandbox"
+  description="Learn about DevJSON Sandbox, our mission to build secure, 100% local-first developer utilities, and why visual editing tools shouldn't compromise your privacy."
+  canonicalUrl="/about"
+>
+  <div class="container mx-auto px-4 py-12 max-w-4xl flex-1 flex flex-col gap-10">
+    <!-- Hero Banner with Gradient Title -->
+    <div class="text-center space-y-4 py-6">
+      <h1 class="text-3xl md:text-5xl font-heading font-extrabold tracking-tight text-foreground bg-gradient-to-r from-primary to-indigo-500 bg-clip-text text-transparent">
+        Privacy-First Developer Utilities
+      </h1>
+      <p class="text-sm md:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed">
+        DevJSON Sandbox was born out of a simple conviction: developers shouldn't have to choose between convenience and security when formatting sensitive data.
+      </p>
+    </div>
+
+    <!-- Core Pillars Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Pillar 1 -->
+      <div class="p-6 border border-border bg-card/30 backdrop-blur-sm space-y-4 hover:border-primary/40 transition-colors duration-300">
+        <div class="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary text-lg">
+          🔒
+        </div>
+        <h3 class="text-base font-heading font-semibold text-foreground">
+          100% Client-Side
+        </h3>
+        <p class="text-xs md:text-sm text-muted-foreground leading-relaxed">
+          Formatting, minification, tree exploration, and conversion are handled entirely in your web browser. No data ever traverses the web to our servers.
+        </p>
+      </div>
+
+      <!-- Pillar 2 -->
+      <div class="p-6 border border-border bg-card/30 backdrop-blur-sm space-y-4 hover:border-primary/40 transition-colors duration-300">
+        <div class="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary text-lg">
+          ⚡
+        </div>
+        <h3 class="text-base font-heading font-semibold text-foreground">
+          Zero Latency
+        </h3>
+        <p class="text-xs md:text-sm text-muted-foreground leading-relaxed">
+          Because calculations happen inside the browser engine, tasks compile instantaneously. No waiting on API gateways or server-side loops.
+        </p>
+      </div>
+
+      <!-- Pillar 3 -->
+      <div class="p-6 border border-border bg-card/30 backdrop-blur-sm space-y-4 hover:border-primary/40 transition-colors duration-300">
+        <div class="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary text-lg">
+          🎨
+        </div>
+        <h3 class="text-base font-heading font-semibold text-foreground">
+          Rich Ergonomics
+        </h3>
+        <p class="text-xs md:text-sm text-muted-foreground leading-relaxed">
+          We combine JSON formatting and syntax diagnostics with a visual tree, breadcrumbs path copying, and dynamic file converters.
+        </p>
+      </div>
+    </div>
+
+    <!-- Mission statement & deep dive -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center border-t border-border/60 pt-10">
+      <div class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-heading font-bold text-foreground">
+          The Problem with Standard Formatters
+        </h2>
+        <p class="text-xs md:text-sm text-muted-foreground leading-relaxed">
+          Most online formatters run on remote server infrastructure. When you paste API response logs, credentials, configuration profiles, or sensitive customer databases, that text is sent over public HTTP networks and processed on external hardware.
+        </p>
+        <p class="text-xs md:text-sm text-muted-foreground leading-relaxed">
+          In corporate environments or highly regulated industries, this transmission represents a direct security violation. DevJSON Sandbox guarantees privacy by executing 100% offline-first logic. If you disconnect your internet, our formatter keeps working perfectly.
+        </p>
+      </div>
+      <div class="p-6 border border-border bg-secondary/15 rounded-xl space-y-4">
+        <h4 class="font-heading font-bold text-foreground text-sm uppercase tracking-wider text-primary">
+          Core Principles
+        </h4>
+        <ul class="space-y-3 text-xs md:text-sm text-muted-foreground">
+          <li class="flex items-start gap-2.5">
+            <span class="text-primary mt-0.5">✓</span>
+            <span><strong>No Tracking:</strong> We do not log inputs or parse parameters.</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <span class="text-primary mt-0.5">✓</span>
+            <span><strong>Open Standards:</strong> Clean formats that respect ECMA specifications.</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <span class="text-primary mt-0.5">✓</span>
+            <span><strong>Developer-First UI:</strong> Dark modes, text sizing options, and responsive blocks out of the box.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</Layout>

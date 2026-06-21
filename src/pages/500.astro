@@ -1,0 +1,60 @@
+---
+import Layout from "@/layouts/main.astro";
+---
+
+<Layout 
+  title="500 Internal Server Error - DevJSON Sandbox"
+  description="An unexpected server compilation or build thread error occurred. Return to DevJSON Sandbox for secure, client-side JSON formatting."
+  canonicalUrl="/500"
+>
+  <div class="container mx-auto px-4 py-16 flex-1 flex flex-col items-center justify-center max-w-xl">
+    <!-- Visual Terminal-like Card -->
+    <div class="w-full border border-border bg-card/40 backdrop-blur-sm overflow-hidden flex flex-col">
+      <!-- Title bar -->
+      <div class="h-9 bg-secondary/25 border-b border-border flex items-center justify-between px-4">
+        <div class="flex items-center gap-1.5">
+          <span class="h-2.5 w-2.5 rounded-full bg-red-500/60"></span>
+          <span class="h-2.5 w-2.5 rounded-full bg-amber-500/60"></span>
+          <span class="h-2.5 w-2.5 rounded-full bg-emerald-500/60"></span>
+        </div>
+        <div class="text-[10px] font-mono text-muted-foreground/60 select-none">fatal_execution.log</div>
+        <div class="w-10"></div>
+      </div>
+      <!-- Console text area -->
+      <div class="p-6 md:p-8 font-mono text-xs md:text-sm leading-relaxed space-y-4">
+        <div class="text-red-500 font-bold tracking-wide flex items-center gap-2">
+          <span>🚨</span> EXCEPTION: 500_INTERNAL_SERVER_ERROR
+        </div>
+        <div class="border-t border-border/40 my-3"></div>
+        <div class="space-y-1.5 text-muted-foreground">
+          <p class="text-foreground font-semibold">&gt; launch_build_worker --verbose</p>
+          <p class="text-red-500/95 font-semibold">[CRITICAL] Unhandled compiler crash: Thread terminated unexpectedly.</p>
+          <p>[WARN] Server environment loop failed to resolve dependency stack.</p>
+          <p>[INFO] Client-side application sandbox remains unaffected. Refresh page or reload index.</p>
+        </div>
+        <div class="pt-4 flex flex-col gap-2.5">
+          <a 
+            href="/" 
+            class="inline-flex items-center justify-center bg-primary text-primary-foreground font-bold hover:bg-primary/95 text-[11px] h-9 px-4 uppercase tracking-wider transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
+          >
+            Recover Sandbox Dashboard
+          </a>
+          <div class="grid grid-cols-2 gap-2">
+            <a 
+              href="/json-validator" 
+              class="inline-flex items-center justify-center bg-secondary text-foreground font-semibold hover:bg-secondary/80 text-[10px] h-8 px-2 border border-border cursor-pointer"
+            >
+              JSON Validator
+            </a>
+            <a 
+              href="/json-viewer" 
+              class="inline-flex items-center justify-center bg-secondary text-foreground font-semibold hover:bg-secondary/80 text-[10px] h-8 px-2 border border-border cursor-pointer"
+            >
+              JSON Viewer
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

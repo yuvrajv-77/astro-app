@@ -1,0 +1,184 @@
+---
+import Layout from "@/layouts/main.astro";
+---
+
+<Layout 
+  title="Contact Us - DevJSON Sandbox"
+  description="Get in touch with DevJSON Sandbox. Send us comments, feature requests, or report bugs regarding our client-side developer utility suite."
+  canonicalUrl="/contact"
+>
+  <div class="container mx-auto px-4 py-12 max-w-4xl flex-1 flex flex-col gap-10">
+    <!-- Header banner -->
+    <div class="text-center space-y-4 py-6">
+      <h1 class="text-3xl md:text-5xl font-heading font-extrabold tracking-tight text-foreground bg-gradient-to-r from-primary to-indigo-500 bg-clip-text text-transparent">
+        Get In Touch
+      </h1>
+      <p class="text-sm md:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed">
+        Have feedback, bug reports, or feature requests? We'd love to hear from you. Fill out the form below or contact us via our developer channels.
+      </p>
+    </div>
+
+    <!-- Contact Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+      <!-- Left side: Form (3 columns) -->
+      <div class="lg:col-span-3 border border-border bg-card/30 backdrop-blur-sm p-6 md:p-8 flex flex-col gap-6 relative overflow-hidden">
+        <h2 class="text-lg font-heading font-bold text-foreground flex items-center gap-2">
+          <span class="text-primary font-mono">&gt;_</span> Send a Message
+        </h2>
+
+        <!-- Form Success State (hidden by default) -->
+        <div id="contact-success" class="hidden absolute inset-0 bg-background/95 backdrop-blur-md flex flex-col items-center justify-center text-center p-6 space-y-4 z-10">
+          <div class="h-12 w-12 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 text-2xl animate-bounce">
+            ✓
+          </div>
+          <div class="space-y-1">
+            <h3 class="text-base font-heading font-bold text-foreground">Message Transmitted!</h3>
+            <p class="text-xs text-muted-foreground max-w-xs leading-relaxed">
+              Your mock submission has completed. As an offline-first tool, your message has been logged directly to your browser's console tab.
+            </p>
+          </div>
+          <button 
+            type="button" 
+            id="reset-form-btn"
+            class="px-4 py-1.5 bg-secondary text-foreground text-xs font-semibold hover:bg-secondary/80 transition-colors border border-border"
+          >
+            Send Another Message
+          </button>
+        </div>
+
+        <!-- Contact Form -->
+        <form id="contact-form" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1.5">
+              <label for="name" class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Name</label>
+              <input 
+                type="text" 
+                id="name" 
+                name="name" 
+                required 
+                class="w-full bg-secondary/20 border border-border px-3 py-2 text-xs md:text-sm text-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all font-mono"
+                placeholder="Enter name"
+              />
+            </div>
+            <div class="space-y-1.5">
+              <label for="email" class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Email</label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                required 
+                class="w-full bg-secondary/20 border border-border px-3 py-2 text-xs md:text-sm text-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all font-mono"
+                placeholder="developer@example.com"
+              />
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <label for="subject" class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Subject</label>
+            <input 
+              type="text" 
+              id="subject" 
+              name="subject" 
+              required 
+              class="w-full bg-secondary/20 border border-border px-3 py-2 text-xs md:text-sm text-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all font-mono"
+              placeholder="e.g. Bug report, API suggestion"
+            />
+          </div>
+
+          <div class="space-y-1.5">
+            <label for="message" class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Message</label>
+            <textarea 
+              id="message" 
+              name="message" 
+              rows="5" 
+              required 
+              class="w-full bg-secondary/20 border border-border px-3 py-2 text-xs md:text-sm text-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all resize-none font-mono"
+              placeholder="Type your message here..."
+            ></textarea>
+          </div>
+
+          <button 
+            type="submit" 
+            class="w-full bg-primary text-primary-foreground hover:bg-primary/95 py-2.5 text-xs font-heading font-bold uppercase tracking-wider shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 cursor-pointer"
+          >
+            Submit Message
+          </button>
+        </form>
+      </div>
+
+      <!-- Right side: Alternatives (2 columns) -->
+      <div class="lg:col-span-2 space-y-6">
+        <!-- Card 1 -->
+        <!-- <div class="p-6 border border-border bg-card/30 backdrop-blur-sm space-y-3">
+          <h3 class="text-sm font-heading font-semibold text-foreground flex items-center gap-2">
+            <span>💻</span> GitHub Issues
+          </h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Spotted a syntax validation bug or want to request a feature like YAML/XML configurations? GitHub is the best place to log developer tickets.
+          </p>
+          <a 
+            href="https://github.com" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="inline-block text-xs font-semibold text-primary hover:underline"
+          >
+            Open GitHub Repository &rarr;
+          </a>
+        </div> -->
+
+        <!-- Card 2 -->
+        <div class="p-6 border border-border bg-card/30 backdrop-blur-sm space-y-3">
+          <h3 class="text-sm font-heading font-semibold text-foreground flex items-center gap-2">
+            <span>✉️</span> Direct Contact
+          </h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            For general inquiries, business partnerships, or advertising updates on our Developer Suite utilities:
+          </p>
+          <div class="text-xs font-mono bg-secondary/35 p-2 border border-border/60 text-card-foreground">
+            contact@devjsonsandbox.pages.dev
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="p-6 border border-primary/20 bg-primary/5 space-y-3">
+          <h3 class="text-sm font-heading font-semibold text-foreground flex items-center gap-2">
+            <span>🛡️</span> Security Disclosures
+          </h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Because DevJSON Sandbox runs 100% locally client-side, your data inputs are inherently secure. However, if you discover any browser security issues, contact us immediately.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client-side script to handle mock form submission -->
+  <script>
+    const contactForm = document.getElementById('contact-form');
+    const contactSuccess = document.getElementById('contact-success');
+    const resetFormBtn = document.getElementById('reset-form-btn');
+
+    contactForm?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      // Collect input fields
+      const formData = {
+        name: (document.getElementById('name') as HTMLInputElement)?.value,
+        email: (document.getElementById('email') as HTMLInputElement)?.value,
+        subject: (document.getElementById('subject') as HTMLInputElement)?.value,
+        message: (document.getElementById('message') as HTMLTextAreaElement)?.value,
+      };
+
+      console.log('DevJSON Sandbox - Contact Form Submission:', formData);
+
+      // Display success view
+      contactSuccess?.classList.remove('hidden');
+    });
+
+    resetFormBtn?.addEventListener('click', () => {
+      // Clear values and toggle view
+      (contactForm as HTMLFormElement)?.reset();
+      contactSuccess?.classList.add('hidden');
+    });
+  </script>
+</Layout>
